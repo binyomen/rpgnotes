@@ -11,7 +11,7 @@ const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
 
-require('./modules/partials.js')()
+require('./modules/partials.js')(__dirname)
 
 const collections_opts = {
     characters: {

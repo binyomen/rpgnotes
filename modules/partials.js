@@ -2,9 +2,10 @@ const fs = require('node:fs');
 const handlebars = require('handlebars');
 const pathMod = require('node:path');
 
-const partialsRoot = './layouts/partials/';
 
-module.exports = function() {
+module.exports = function(projectDir) {
+    const partialsRoot = projectDir + '/layouts/partials/';
+
     const files = fs.readdirSync(partialsRoot);
     for (const file of files) {
         const partialName = pathMod.basename(file, '.hbs');
