@@ -7,11 +7,11 @@ const layouts = require('@metalsmith/layouts');
 const markdown = require('@metalsmith/markdown');
 const permalinks = require('@metalsmith/permalinks');
 
-const collect = require('./plugins/collect.js');
-const home = require('./plugins/home.js');
-const links = require('./plugins/links.js');
+const collect = require('./modules/collect.js');
+const home = require('./modules/home.js');
+const links = require('./modules/links.js');
 
-require('./plugins/partials.js')()
+require('./modules/partials.js')()
 
 const collections_opts = {
     characters: {
