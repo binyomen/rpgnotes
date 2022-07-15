@@ -1,0 +1,21 @@
+{{#*inline "collectionPartial"}}
+  <h2>{{ metadata.title }}</h2>
+  <ul>
+  {{#each .}}
+    <li><a href="/{{ path }}">{{ title }}</a></li>
+  {{/each}}
+  </ul>
+{{/inline}}
+{{> page_head }}
+    <nav><a href="/">Home</a></nav>
+    <h1>{{ title }}</h1>
+
+    {{> collectionPartial collections.journals }}
+    {{> collectionPartial collections.characters }}
+    {{> collectionPartial collections.npcs }}
+    {{> collectionPartial collections.locations }}
+    {{> collectionPartial collections.factions }}
+    {{> collectionPartial collections.species }}
+    {{> collectionPartial collections.items }}
+    {{> collectionPartial uncategorised }}
+{{> page_foot }}
