@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const process = require('node:process');
+
 const metalsmith = require('metalsmith');
 
 const collections = require('@metalsmith/collections');
@@ -11,7 +13,7 @@ const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
 
-require('./modules/partials.js')(__dirname)
+require('./modules/partials.js')(__dirname);
 
 const collections_opts = {
     characters: {
@@ -51,9 +53,11 @@ const collections_opts = {
     },
 };
 
+const cwd = process.cwd();
+
 metalsmith(__dirname)
-    .source('./src')
-    .destination('./build')
+    .source(cwd + '/src')
+    .destination(cwd + '/build')
     .clean(true)
     .use(home())
     .use(collections(collections_opts))
