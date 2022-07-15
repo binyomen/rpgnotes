@@ -1,7 +1,7 @@
 module.exports = function() {
     return function(files, metalsmith, done) {
         files['index.md'] = {
-            title: 'Lasers and Feelings',
+            title: 'Home',
             layout: 'home.hbs',
             contents: '',
             isHome: true,
