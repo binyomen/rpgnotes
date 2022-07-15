@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const metalsmith = require('metalsmith');
 
 const collections = require('@metalsmith/collections');
