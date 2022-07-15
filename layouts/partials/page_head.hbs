@@ -1,3 +1,7 @@
+{{#*inline "collectionNavLink"}}
+  <li><a href="{{ metadata.path }}">{{ metadata.title }}</a></li>
+{{/inline}}
+
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
@@ -10,6 +14,18 @@
   </head>
   <body>
     <header>
-      <nav><a href="/">Home</a></nav>
       <h1>{{ title }}</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          {{> collectionNavLink collections.journals }}
+          {{> collectionNavLink collections.characters }}
+          {{> collectionNavLink collections.npcs }}
+          {{> collectionNavLink collections.locations }}
+          {{> collectionNavLink collections.factions }}
+          {{> collectionNavLink collections.species }}
+          {{> collectionNavLink collections.items }}
+          {{> collectionNavLink collections.uncategorised }}
+        </ul>
+      </nav>
     </header>
