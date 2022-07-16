@@ -59,7 +59,7 @@ module.exports = function() {
                 const link = select(l);
 
                 const href = unescapeHref(link.attr('href'));
-                if (pathMod.extname(href) != '.md') {
+                if (pathMod.extname(href) !== '.md') {
                     continue;
                 }
 
