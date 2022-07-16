@@ -1,2 +1,26 @@
 [build]
 source = 'test_pages'
+
+[[collections]]
+name = 'journals'
+title = 'Journals'
+
+[[collections]]
+name = 'characters'
+title = 'Characters'
+
+[[collections]]
+name = 'npcs'
+title = 'NPCs'
+
+[[collections]]
+name = 'locations'
+title = 'Locations'
+
+[[collections]]
+name = 'factions'
+title = 'Factions'
+
+[[collections]]
+name = 'items'
+title = 'Items'

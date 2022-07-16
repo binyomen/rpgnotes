@@ -17,43 +17,10 @@ const options = require('./modules/options.js')();
 
 require('./modules/partials.js')(__dirname);
 
-const collections_opts = {
-    characters: {
-        metadata: {
-            title: 'Characters',
-        },
-    },
-    factions: {
-        metadata: {
-            title: 'Factions',
-        },
-    },
-    items: {
-        metadata: {
-            title: 'Items',
-        },
-    },
-    journals: {
-        metadata: {
-            title: 'Journals',
-        },
-    },
-    locations: {
-        metadata: {
-            title: 'Locations',
-        },
-    },
-    npcs: {
-        metadata: {
-            title: 'NPCs',
-        },
-    },
-    species: {
-        metadata: {
-            title: 'Species',
-        },
-    },
-};
+const collections_opts = {};
+for (const collection of options.collections) {
+    collections_opts[collection.name] = {metadata: {title: collection.title}};
+}
 
 metalsmith(__dirname)
     .source(options.build.source)

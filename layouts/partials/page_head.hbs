@@ -18,14 +18,9 @@
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
-          {{> collectionNavLink collections.journals }}
-          {{> collectionNavLink collections.characters }}
-          {{> collectionNavLink collections.npcs }}
-          {{> collectionNavLink collections.locations }}
-          {{> collectionNavLink collections.factions }}
-          {{> collectionNavLink collections.species }}
-          {{> collectionNavLink collections.items }}
-          {{> collectionNavLink collections.uncategorised }}
+          {{#each collections}}
+            {{> collectionNavLink this }}
+          {{/each}}
         </ul>
       </nav>
     </header>

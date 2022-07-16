@@ -25,5 +25,7 @@ module.exports = function() {
     options.build.source = pathMod.join(cwd, defaultOption(options.build.source, 'src'));
     options.build.destination = pathMod.join(cwd, defaultOption(options.build.destination, 'build'));
 
+    options.collections = defaultOption(options.collections, []);
+
     return options;
 };
