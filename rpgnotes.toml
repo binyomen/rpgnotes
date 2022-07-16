@@ -1,3 +1,6 @@
+[about]
+title = 'Test for rpgnotes'
+
 [build]
 source = 'test_pages'
 

@@ -23,6 +23,9 @@ for (const collection of options.collections) {
 }
 
 metalsmith(__dirname)
+    .metadata({
+        siteTitle: options.about.title,
+    })
     .source(options.build.source)
     .destination(options.build.destination)
     .clean(true)

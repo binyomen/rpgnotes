@@ -21,6 +21,9 @@ module.exports = function() {
 
     const options = toml.parse(contents);
 
+    options.about = defaultOption(options.about, {});
+    options.about.title = defaultOption(options.about.title, '[NO TITLE]');
+
     options.build = defaultOption(options.build, {});
     options.build.source = pathMod.join(cwd, defaultOption(options.build.source, 'src'));
     options.build.destination = pathMod.join(cwd, defaultOption(options.build.destination, 'build'));
