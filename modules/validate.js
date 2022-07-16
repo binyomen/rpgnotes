@@ -2,9 +2,11 @@
 
 const cheerio = require('cheerio');
 
+const util = require('./util.js');
+
 module.exports = function() {
     return function(files, metalsmith, done) {
-        for (const [path, file] of Object.entries(files)) {
+        for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
 
             if (select('h1').length > 0) {
@@ -17,5 +19,5 @@ module.exports = function() {
         }
 
         done();
-    }
-}
+    };
+};

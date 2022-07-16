@@ -1,5 +1,7 @@
 'use strict';
 
+const util = require('./util.js');
+
 module.exports = function() {
     return function(files, metalsmith, done) {
         const metadata = metalsmith.metadata();
@@ -9,7 +11,7 @@ module.exports = function() {
             title: 'Uncategorised',
         };
 
-        for (const [path, file] of Object.entries(files)) {
+        for (const [path, file] of util.fileEntries(files)) {
             if (file.collection) {
                 delete files[path];
 

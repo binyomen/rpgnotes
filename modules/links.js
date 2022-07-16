@@ -3,12 +3,10 @@
 const cheerio = require('cheerio');
 const pathMod = require('node:path');
 
-function findPagePath(files, filename) {
-    for (const path of Object.keys(files)) {
-        if (pathMod.extname(path) != '.html') {
-            continue;
-        }
+const util = require('./util.js');
 
+function findPagePath(files, filename) {
+    for (const path of util.filePaths(files, '.html')) {
         const basename = pathMod.basename(path, '.html')
         if (basename === filename) {
             const dirname = pathMod.dirname(path)
@@ -53,8 +51,9 @@ function unescapeHref(href) {
 
 module.exports = function() {
     return function(files, metalsmith, done) {
-        for (const [path, file] of Object.entries(files)) {
+        for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
+
             for (const l of select('a')) {
                 const link = select(l);
 
