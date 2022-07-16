@@ -2,7 +2,7 @@ $local:ErrorActionPreference = 'Stop'
 
 Push-Location $PSScriptRoot
 try {
-    Get-Process python | `
+    Get-Process python -ErrorAction SilentlyContinue | `
         Where-Object {$_.CommandLine -like '*http.server*'} | `
         Stop-Process -Force
 
