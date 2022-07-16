@@ -4,12 +4,12 @@ const pathMod = require('node:path');
 
 
 module.exports = function(projectDir) {
-    const partialsRoot = projectDir + '/layouts/partials/';
+    const partialsRoot = pathMod.join(projectDir, 'layouts', 'partials');
 
     const files = fs.readdirSync(partialsRoot);
     for (const file of files) {
         const partialName = pathMod.basename(file, '.hbs');
-        const partialContents = fs.readFileSync(partialsRoot + file, 'utf8');
+        const partialContents = fs.readFileSync(pathMod.join(partialsRoot, file), 'utf8');
         handlebars.registerPartial(partialName, partialContents);
     }
 };
