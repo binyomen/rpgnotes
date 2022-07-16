@@ -2,12 +2,8 @@
 
 module.exports = function() {
     return function(files, metalsmith, done) {
-        files['index.md'] = {
-            title: 'Home',
-            layout: 'home.hbs',
-            contents: '',
-            isHome: true,
-        };
+        const home = files['index.md'];
+        home.isHome = true;
 
         done();
     }
