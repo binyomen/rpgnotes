@@ -2,7 +2,10 @@ $local:ErrorActionPreference = 'Stop'
 
 Push-Location $PSScriptRoot
 try {
-    Get-Job | Stop-Job
+    Get-Process python | `
+        Where-Object {$_.CommandLine -like '*http.server*'} | `
+        Stop-Process -Force
+
     node index.js
 
     Push-Location 'build'
