@@ -26,6 +26,7 @@ for (const collection of options.collections) {
 metalsmith(__dirname)
     .metadata({
         siteTitle: options.about.title,
+        buildDate: new Date(),
     })
     .source(options.build.source)
     .destination(options.build.destination)
