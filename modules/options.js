@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('node:fs');
 const pathMod = require('node:path');
 const process = require('node:process');

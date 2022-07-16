@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function() {
     return function(files, metalsmith, done) {
         const metadata = metalsmith.metadata();

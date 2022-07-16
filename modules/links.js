@@ -1,3 +1,5 @@
+'use strict';
+
 const cheerio = require('cheerio');
 const pathMod = require('node:path');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('node:fs');
 const handlebars = require('handlebars');
 const pathMod = require('node:path');

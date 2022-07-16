@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const metalsmith = require('metalsmith');
 
 const collections = require('@metalsmith/collections');
