@@ -12,6 +12,7 @@ const permalinks = require('@metalsmith/permalinks');
 const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
+const secrets = require('./modules/secrets.js');
 const validate = require('./modules/validate.js');
 
 const options = require('./modules/options.js')();
@@ -31,10 +32,12 @@ metalsmith(__dirname)
     .source(options.build.source)
     .destination(options.build.destination)
     .clean(true)
+    .use(secrets.pages())
     .use(home())
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
+    .use(secrets.sections())
     .use(validate())
     .use(layouts({default: 'page.hbs'}))
     .use(links())

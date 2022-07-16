@@ -17,7 +17,7 @@ function findPagePath(files, filename) {
         }
     }
 
-    throw new Error('Page "' + filename + '" not found.');
+    return null;
 }
 
 function parseHrefEncodedToString(encoded) {
@@ -55,17 +55,26 @@ module.exports = function() {
     return function(files, metalsmith, done) {
         for (const [path, file] of Object.entries(files)) {
             const select = cheerio.load(file.contents);
-            for (const link of select('a')) {
-                const href = unescapeHref(link.attribs.href);
+            for (const l of select('a')) {
+                const link = select(l);
+
+                const href = unescapeHref(link.attr('href'));
                 if (pathMod.extname(href) != '.md') {
                     continue;
                 }
 
                 const basename = pathMod.basename(href, '.md')
-                link.attribs.href = findPagePath(files, basename);
+                const newHref = findPagePath(files, basename);
+                if (newHref) {
+                    link.attr('href', newHref);
+                } else {
+                    console.warn('Page "' + basename + '" not found, linked from "' + path + '".');
+                    link.replaceWith(link.text());
+                }
 
-                file.contents = select.root().html();
             }
+
+            file.contents = Buffer.from(select.root().html());
         }
 
         done();
