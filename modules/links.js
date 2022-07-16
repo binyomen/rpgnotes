@@ -8,9 +8,9 @@ function findPagePath(files, filename) {
         }
 
         const basename = pathMod.basename(path, '.html')
-        if (basename == filename) {
+        if (basename === filename) {
             const dirname = pathMod.dirname(path)
-            const dir = dirname == '.' ? '' : dirname + '/';
+            const dir = dirname === '.' ? '' : dirname + '/';
             return '/' + dir + basename + '/'
         }
     }
