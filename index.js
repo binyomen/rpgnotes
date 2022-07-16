@@ -12,6 +12,7 @@ const permalinks = require('@metalsmith/permalinks');
 const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
+const validate = require('./modules/validate.js');
 
 const options = require('./modules/options.js')();
 
@@ -33,6 +34,7 @@ metalsmith(__dirname)
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
+    .use(validate())
     .use(layouts({default: 'page.hbs'}))
     .use(links())
     .use(permalinks({relative: false}))
