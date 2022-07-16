@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "bin": "index.js",
   "dependencies": {
+    "@ltd/j-toml": "^1.30.0",
     "@metalsmith/collections": "^1.2.1",
     "@metalsmith/layouts": "^2.5.1",
     "@metalsmith/markdown": "^1.6.0",
