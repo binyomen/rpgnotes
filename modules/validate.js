@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 const util = require('./util.js');
 
 module.exports = function() {
-    return function(files, metalsmith, done) {
+    return function(files, metalsmith) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
 
@@ -17,7 +17,5 @@ module.exports = function() {
                 throw new Error('There should not be any h2s within a page.');
             }
         }
-
-        done();
     };
 };

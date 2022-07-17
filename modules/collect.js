@@ -3,7 +3,7 @@
 const util = require('./util.js');
 
 module.exports = function() {
-    return function(files, metalsmith, done) {
+    return function(files, metalsmith) {
         const metadata = metalsmith.metadata();
 
         metadata.collections.uncategorised = [];
@@ -31,7 +31,5 @@ module.exports = function() {
                 contents: '',
             };
         }
-
-        done();
     }
 }

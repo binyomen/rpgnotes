@@ -5,9 +5,8 @@ const cheerio = require('cheerio');
 const util = require('./util.js');
 
 module.exports.pages = function(gmMode) {
-    return function(files, metalsmith, done) {
+    return function(files, metalsmith) {
         if (gmMode) {
-            done();
             return;
         }
 
@@ -22,13 +21,11 @@ module.exports.pages = function(gmMode) {
         for (const path of secretPages) {
             delete files[path];
         }
-
-        done();
     };
 };
 
 module.exports.sections = function(gmMode) {
-    return function(files, metalsmith, done) {
+    return function(files, metalsmith) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
             for (const e of select('.secret')) {
@@ -42,7 +39,5 @@ module.exports.sections = function(gmMode) {
 
             file.contents = Buffer.from(select.root().html());
         }
-
-        done();
     };
 };

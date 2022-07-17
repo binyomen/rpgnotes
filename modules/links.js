@@ -50,7 +50,7 @@ function unescapeHref(href) {
 }
 
 module.exports = function(gmMode) {
-    return function(files, metalsmith, done) {
+    return function(files, metalsmith) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
 
@@ -81,7 +81,5 @@ module.exports = function(gmMode) {
 
             file.contents = Buffer.from(select.root().html());
         }
-
-        done();
     }
 };
