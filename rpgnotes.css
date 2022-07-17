@@ -1,0 +1,4 @@
+/* Mark block children of the mark element as well */
+mark * {
+    background: var(--marked);
+}

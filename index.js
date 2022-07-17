@@ -11,6 +11,7 @@ const layouts = require('@metalsmith/layouts');
 const markdown = require('@metalsmith/markdown');
 const permalinks = require('@metalsmith/permalinks');
 
+const css = require('./modules/css.js');
 const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
@@ -46,6 +47,7 @@ metalsmith(__dirname)
     .use(layouts({default: 'page.hbs'}))
     .use(links(gmMode))
     .use(permalinks({relative: false}))
+    .use(css(__dirname))
     .build(function(err, files) {
         if (err) { throw err; }
     });
