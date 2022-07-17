@@ -10,11 +10,11 @@
 
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 
-    <title>{{siteTitle}} - {{ title }}</title>
+    <title>{{ siteTitle }} - {{{ title }}}</title>
   </head>
   <body>
     <header>
-      <h1>{{siteTitle}}</h1>
+      <h1>{{ siteTitle }}</h1>
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
@@ -26,5 +26,5 @@
     </header>
     <main>
       {{#if title }}
-        <h2>{{ title }}</h2>
+        <h2>{{{ title }}}</h2>
       {{/if}}

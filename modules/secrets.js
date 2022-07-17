@@ -6,20 +6,22 @@ const util = require('./util.js');
 
 module.exports.pages = function(gmMode) {
     return function(files, metalsmith) {
-        if (gmMode) {
-            return;
-        }
-
         const secretPages = [];
 
         for (const [path, file] of util.fileEntries(files)) {
             if (file.secret) {
+                if (file.title && gmMode) {
+                    file.title = '<mark>[SECRET]</mark> ' + file.title;
+                }
+
                 secretPages.push(path);
             }
         }
 
-        for (const path of secretPages) {
-            delete files[path];
+        if (!gmMode) {
+            for (const path of secretPages) {
+                delete files[path];
+            }
         }
     };
 };
@@ -31,6 +33,7 @@ module.exports.sections = function(gmMode) {
             for (const e of select('.secret')) {
                 const element = select(e);
                 if (gmMode) {
+                    element.contents().wrapAll('<mark></mark>');
                     element.replaceWith(element.contents());
                 } else {
                     element.remove();
