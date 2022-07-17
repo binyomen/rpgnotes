@@ -49,7 +49,7 @@ function unescapeHref(href) {
     return newHref;
 }
 
-module.exports = function() {
+module.exports = function(gmMode) {
     return function(files, metalsmith, done) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
@@ -67,8 +67,14 @@ module.exports = function() {
                 if (newHref) {
                     link.attr('href', newHref);
                 } else {
-                    console.warn('Page "' + basename + '" not found, linked from "' + path + '".');
-                    link.replaceWith(link.text());
+                    const msg = 'Page "' + basename + '" not found, linked from "' + path + '".';
+                    if (gmMode) {
+                        throw new Error(msg);
+                    } else {
+                        console.warn(msg);
+                    }
+
+                    link.replaceWith(link.contents());
                 }
 
             }

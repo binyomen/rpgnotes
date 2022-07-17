@@ -2,6 +2,8 @@
 
 'use strict';
 
+const process = require('node:process');
+
 const metalsmith = require('metalsmith');
 
 const collections = require('@metalsmith/collections');
@@ -24,6 +26,8 @@ for (const collection of options.collections) {
     collections_opts[collection.name] = {metadata: {title: collection.title}};
 }
 
+const gmMode = process.argv.includes('--gm-mode');
+
 metalsmith(__dirname)
     .metadata({
         siteTitle: options.about.title,
@@ -32,15 +36,15 @@ metalsmith(__dirname)
     .source(options.build.source)
     .destination(options.build.destination)
     .clean(true)
-    .use(secrets.pages())
+    .use(secrets.pages(gmMode))
     .use(home())
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
-    .use(secrets.sections())
+    .use(secrets.sections(gmMode))
     .use(validate())
     .use(layouts({default: 'page.hbs'}))
-    .use(links())
+    .use(links(gmMode))
     .use(permalinks({relative: false}))
     .build(function(err, files) {
         if (err) { throw err; }

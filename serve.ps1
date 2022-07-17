@@ -1,3 +1,9 @@
+[CmdletBinding()]
+param(
+    [Parameter()]
+    [Switch] $GmMode
+)
+
 $local:ErrorActionPreference = 'Stop'
 
 Push-Location $PSScriptRoot
@@ -6,7 +12,8 @@ try {
         Where-Object {$_.CommandLine -like '*http.server*'} | `
         Stop-Process -Force
 
-    node index.js
+    $arguments = $GmMode ? '--gm-mode' : ''
+    node index.js $arguments
 
     Push-Location 'build'
     try {
