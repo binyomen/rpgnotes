@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="/css/rpgnotes.css">
 
-    <title>{{ siteTitle }} - {{{ title }}}</title>
+    {{#if title}}
+      <title>{{ siteTitle }} - {{{ title }}}</title>
+    {{else}}
+      <title>{{ siteTitle }}</title>
+    {{/if}}
   </head>
   <body>
     <header>
