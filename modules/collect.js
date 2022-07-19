@@ -17,7 +17,7 @@ module.exports = function() {
 
                 const newPath = file.collection + '/' + path;
                 files[newPath] = file;
-            } else if (!file.isHome && file.title) {
+            } else if (!file.isHome && !file.isSearch && file.title) {
                 metadata.collections.uncategorised.push(file);
             }
         }
