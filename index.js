@@ -15,6 +15,7 @@ const css = require('./modules/css.js');
 const collect = require('./modules/collect.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
+const search = require('./modules/search.js');
 const secrets = require('./modules/secrets.js');
 const validate = require('./modules/validate.js');
 
@@ -39,15 +40,20 @@ metalsmith(__dirname)
     .clean(true)
     .use(secrets.pages(gmMode))
     .use(home())
+    .use(css(__dirname))
+    .use(search.page(__dirname))
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
     .use(secrets.sections(gmMode))
     .use(validate())
-    .use(layouts({default: 'page.hbs'}))
+    .use(layouts({
+        default: 'page.hbs',
+        pattern: '**/*.html',
+    }))
     .use(links(gmMode))
     .use(permalinks({relative: false}))
-    .use(css(__dirname))
+    .use(search.index())
     .build(function(err, files) {
         if (err) { throw err; }
     });

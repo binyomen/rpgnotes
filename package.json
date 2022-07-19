@@ -9,6 +9,7 @@
     "@metalsmith/markdown": "^1.6.0",
     "@metalsmith/permalinks": "^2.4.0",
     "cheerio": "^1.0.0-rc.12",
+    "fuse.js": "^6.6.2",
     "jstransformer-handlebars": "^1.2.0",
     "metalsmith": "^2.5.0"
   }

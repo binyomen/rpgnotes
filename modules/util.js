@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('node:fs');
 const pathMod = require('node:path');
 
 module.exports.fileEntries = function(files, extension) {
@@ -29,11 +30,29 @@ module.exports.filePaths = function(files, extension) {
 module.exports.fileObjects = function(files, extension) {
     const objects = [];
 
-    for (const [path, file] of Object.objects(files)) {
+    for (const [path, file] of Object.entries(files)) {
         if (extension === undefined || pathMod.extname(path) === extension) {
             objects.push(file);
         }
     }
 
     return objects;
+};
+
+module.exports.addFile = function(files, fromPath, toPath) {
+    files[toPath] = {contents: fs.readFileSync(fromPath)};
+};
+
+module.exports.normalizePath = function(path) {
+    path = path.replaceAll('\\', '/');
+    if (path[0] != '/') {
+        path = '/' + path;
+    }
+
+    const indexString = 'index.html';
+    if (path.endsWith(indexString)) {
+        path = path.substring(0, path.length - indexString.length);
+    }
+
+    return path;
 };

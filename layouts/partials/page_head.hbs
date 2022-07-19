@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="/css/rpgnotes.css">
 
+    {{#if isSearch}}
+      <script type="module" src="/js/search.js"></script>
+    {{/if}}
+
     {{#if title}}
       <title>{{ siteTitle }} - {{{ title }}}</title>
     {{else}}
@@ -28,6 +32,10 @@
           {{/each}}
         </ul>
       </nav>
+      <form method="get" action="/search/">
+        <input type="search" name="q" autocomplete="off" placeholder="e.g. good duck">
+        <button>Search</button>
+      </form>
     </header>
     <main>
       {{#if title }}
