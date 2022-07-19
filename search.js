@@ -26,7 +26,7 @@ const objects = await (await fetch('/search_objects.json')).json();
 const fuseIndex = Fuse.parseIndex(await (await fetch('/search_index.json')).json());
 
 const fuseOptions = {
-    keys: ['contents'],
+    keys: [{name: 'title', weight: 2}, 'contents'],
     includeScore: true,
     includeMatches: true,
     minMatchCharLength: 3,

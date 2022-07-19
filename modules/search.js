@@ -42,7 +42,7 @@ module.exports.index = function() {
 
         files['search_objects.json'] = {contents: JSON.stringify(objects)};
 
-        const index = Fuse.createIndex(['contents'], objects);
+        const index = Fuse.createIndex(['title', 'contents'], objects);
         files['search_index.json'] = {contents: JSON.stringify(index.toJSON())};
     };
 };
