@@ -1,6 +1,12 @@
 import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.min.js';
 
+const searchText = new URLSearchParams(location.search).get('q');
+
 function getContext(s, start, end, context) {
+    if (!s.toLowerCase().substring(start, end).includes(searchText.toLowerCase())) {
+        return null;
+    }
+
     const contextStart = Math.max(start - context, 0);
     const contextEnd = Math.min(end + context, s.length);
 
@@ -18,8 +24,6 @@ function getContext(s, start, end, context) {
     );
 }
 
-const searchText = new URLSearchParams(location.search).get('q');
-
 document.getElementsByTagName('h2')[0].textContent = 'Search results for "' + searchText + '".';
 
 const objects = await (await fetch('/search_objects.json')).json();
@@ -31,7 +35,7 @@ const fuseOptions = {
     includeMatches: true,
     minMatchCharLength: 3,
     ignoreLocation: true,
-    useExtendedSearch: true,
+    ignoreFieldNorm: true,
 };
 const fuse = new Fuse(objects, fuseOptions, fuseIndex);
 
@@ -51,12 +55,19 @@ for (const result of fuse.search(searchText)) {
     const contexts = [];
     for (const match of result.matches) {
         for (const index of match.indices) {
-            contexts.push(getContext(match.value, index[0], index[1] + 1, 10));
+            const context = getContext(match.value, index[0], index[1] + 1, 10);
+            if (context) {
+                contexts.push(context);
+            }
         }
     }
 
     const p2 = document.createElement('p');
-    p2.innerHTML = contexts.join(', ');
+    if (contexts.length > 0) {
+        p2.innerHTML = contexts.join(', ');
+    } else {
+        p2.innerHTML = '<p>No exact matches found.</p>';
+    }
 
     const newListItem = document.createElement('li');
     newListItem.appendChild(p1);
