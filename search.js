@@ -2,7 +2,8 @@ import MiniSearch from 'https://cdn.jsdelivr.net/npm/minisearch@5.0.0/dist/es5m/
 
 const searchText = new URLSearchParams(location.search).get('q');
 
-document.getElementsByTagName('h2')[0].textContent = 'Search results for "' + searchText + '".';
+document.getElementById('page-header').textContent = 'Search results for "' + searchText + '"';
+document.getElementById('search-input').value = searchText;
 
 const searchOptions = await (await fetch('/search_options.json')).json();
 const searchIndex = await (await fetch('/search_index.json')).text();

@@ -9,7 +9,7 @@ const util = require('./util.js');
 module.exports.page = function(projectDir) {
     return function(files, metalsmith) {
         files['search.md'] = {
-            title: 'Search results for "".',
+            title: 'Search results for ""',
             contents: Buffer.from('<ol id="search-results"></ol>'),
             isSearch: true,
         };
