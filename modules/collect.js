@@ -22,14 +22,23 @@ module.exports = function() {
             }
         }
 
+        const emptyCollections = [];
         for (const [name, collection] of Object.entries(metadata.collections)) {
-            collection.metadata.path = '/' + name + '/';
-            files[name + '.md'] = {
-                title: collection.metadata.title,
-                layout: 'collection_page.hbs',
-                pages: collection,
-                contents: '',
-            };
+            if (collection.length > 0) {
+                collection.metadata.path = '/' + name + '/';
+                files[name + '.md'] = {
+                    title: collection.metadata.title,
+                    layout: 'collection_page.hbs',
+                    pages: collection,
+                    contents: '',
+                };
+            } else {
+                emptyCollections.push(name);
+            }
+        }
+
+        for (const name of emptyCollections) {
+            delete metadata.collections[name];
         }
     }
 }

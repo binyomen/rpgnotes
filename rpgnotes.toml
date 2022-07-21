@@ -27,3 +27,7 @@ title = 'Factions'
 [[collections]]
 name = 'items'
 title = 'Items'
+
+[[collections]]
+name = 'empty'
+title = 'Empty'
