@@ -11,6 +11,7 @@
         "cheerio": "^1.0.0-rc.12",
         "jstransformer-handlebars": "^1.2.0",
         "metalsmith": "^2.5.0",
+        "metalsmith-broken-link-checker": "^1.0.2",
         "minisearch": "^5.0.0"
     }
 }

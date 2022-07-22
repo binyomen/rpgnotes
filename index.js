@@ -6,6 +6,7 @@ const process = require('node:process');
 
 const metalsmith = require('metalsmith');
 
+const brokenLinkChecker = require('metalsmith-broken-link-checker');
 const collections = require('@metalsmith/collections');
 const layouts = require('@metalsmith/layouts');
 const markdown = require('@metalsmith/markdown');
@@ -53,6 +54,7 @@ metalsmith(__dirname)
     }))
     .use(links(gmMode))
     .use(permalinks({relative: false}))
+    .use(brokenLinkChecker({checkAnchors: true}))
     .use(search.index())
     .build(function(err, files) {
         if (err) { throw err; }
