@@ -19,7 +19,7 @@ module.exports = function() {
 
                 delete files[path];
 
-                const newPath = file.collection + '/' + path;
+                const newPath = `${file.collection}/${path}`;
                 files[newPath] = file;
             } else if (!file.isHome && !file.isSearch && file.title) {
                 metadata.collections.uncategorised.push(file);
@@ -29,8 +29,8 @@ module.exports = function() {
         const emptyCollections = [];
         for (const [name, collection] of Object.entries(metadata.collections)) {
             if (collection.length > 0) {
-                collection.metadata.path = '/' + name + '/';
-                files[name + '.md'] = {
+                collection.metadata.path = `/${name}/`;
+                files[`${name}.md`] = {
                     title: collection.metadata.title,
                     layout: 'collection_page.hbs',
                     pages: collection,

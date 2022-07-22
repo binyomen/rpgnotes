@@ -2,7 +2,7 @@ import MiniSearch from 'https://cdn.jsdelivr.net/npm/minisearch@5.0.0/dist/es5m/
 
 const searchText = new URLSearchParams(location.search).get('q');
 
-document.getElementById('page-header').textContent = 'Search results for "' + searchText + '"';
+document.getElementById('page-header').textContent = `Search results for "${searchText}"`;
 document.getElementById('search-input').value = searchText;
 
 const searchOptions = await (await fetch('/search_options.json')).json();
@@ -14,7 +14,7 @@ function escapeRegex(s) {
 }
 
 function getIndicesOfMatch(match, sourceText) {
-    const regex = new RegExp('\\b' + escapeRegex(match) + '\\b', 'gi');
+    const regex = new RegExp(`\\b${escapeRegex(match)}\\b`, 'gi');
     const matches = sourceText.matchAll(regex);
 
     const indices = [];

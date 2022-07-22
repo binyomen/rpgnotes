@@ -7,11 +7,11 @@ const util = require('./util.js');
 
 function findPagePath(files, filename) {
     for (const path of util.filePaths(files, '.html')) {
-        const basename = pathMod.basename(path, '.html')
+        const basename = pathMod.basename(path, '.html');
         if (basename === filename) {
-            const dirname = pathMod.dirname(path)
-            const dir = dirname === '.' ? '' : dirname + '/';
-            return '/' + dir + basename + '/'
+            const dirname = pathMod.dirname(path);
+            const dir = dirname === '.' ? '' : `${dirname}/`;
+            return `/${dir}${basename}/`;
         }
     }
 
@@ -67,7 +67,7 @@ module.exports = function(gmMode) {
                 if (newHref) {
                     link.attr('href', newHref);
                 } else {
-                    const msg = 'Page "' + basename + '" not found, linked from "' + path + '".';
+                    const msg = `Page "${basename}" not found, linked from "${path}".`;
                     if (gmMode) {
                         throw new Error(msg);
                     } else {
