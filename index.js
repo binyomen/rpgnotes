@@ -14,6 +14,7 @@ const permalinks = require('@metalsmith/permalinks');
 
 const css = require('./modules/css.js');
 const collect = require('./modules/collect.js');
+const gitDate = require('./modules/gitDate.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
 const search = require('./modules/search.js');
@@ -45,6 +46,7 @@ metalsmith(__dirname)
     .destination(options.build.destination)
     .clean(true)
     .use(secrets.pages(gmMode))
+    .use(gitDate(options.build.source))
     .use(home())
     .use(css(__dirname))
     .use(search.page(__dirname))

@@ -1,6 +1,12 @@
     </main>
     <footer>
-      <p>Built <time datetime="{{ buildDateIso }}">{{ buildDateDisplay }}</time></p>
+      <p>
+        {{#if gitDateDisplay}}
+          This page was last updated on <time datetime="{{ gitDateIso }}">{{ gitDateDisplay }}</time>.
+        {{else}}
+          This site was generated on <time datetime="{{ buildDateIso }}">{{ buildDateDisplay }}</time>.
+        {{/if}}
+      </p>
     </footer>
   </body>
 </html>
