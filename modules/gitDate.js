@@ -42,7 +42,7 @@ module.exports = function(source) {
             }
 
             const gitDate = getFileDate(fullPath);
-            file.gitDateDisplay = gitDate.toString();
+            file.gitDateDisplay = gitDate.toUTCString();
             file.gitDateIso = gitDate.toISOString();
         }
     }

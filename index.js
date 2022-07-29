@@ -33,7 +33,7 @@ for (const collection of options.collections) {
 const gmMode = process.argv.includes('--gm-mode');
 
 const buildDate = new Date();
-const buildDateDisplay = buildDate.toString();
+const buildDateDisplay = buildDate.toUTCString();
 const buildDateIso = buildDate.toISOString();
 
 metalsmith(__dirname)
