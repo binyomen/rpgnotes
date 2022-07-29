@@ -31,10 +31,15 @@ for (const collection of options.collections) {
 
 const gmMode = process.argv.includes('--gm-mode');
 
+const buildDate = new Date();
+const buildDateDisplay = buildDate.toString();
+const buildDateIso = buildDate.toISOString();
+
 metalsmith(__dirname)
     .metadata({
         siteTitle: options.about.title,
-        buildDate: new Date(),
+        buildDateDisplay,
+        buildDateIso,
     })
     .source(options.build.source)
     .destination(options.build.destination)
