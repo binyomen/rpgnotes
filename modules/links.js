@@ -67,11 +67,11 @@ module.exports = function(gmMode) {
                 if (newHref) {
                     link.attr('href', newHref);
                 } else {
-                    const msg = `Warning: Page "${basename}" not found, linked from "${path}".`;
+                    const msg = `Page "${basename}" not found, linked from "${path}".`;
                     if (gmMode) {
                         throw new Error(msg);
                     } else {
-                        console.warn(msg);
+                        util.warn(msg);
                     }
 
                     link.replaceWith(link.contents());

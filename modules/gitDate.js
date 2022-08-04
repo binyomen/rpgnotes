@@ -25,7 +25,12 @@ function getFileDate(path) {
         throw new Error(`Failed to get the date for file "${path}": ${result.stderr.toString()}`);
     }
 
-    return new Date(result.stdout.toString());
+    const stdout = result.stdout.toString();
+    if (stdout == '') {
+        return null;
+    } else {
+        return new Date(result.stdout.toString());
+    }
 }
 
 module.exports = function(source) {
@@ -38,10 +43,15 @@ module.exports = function(source) {
             const fullPath = pathMod.relative('.', pathMod.join(source, path));
 
             if (isFileChanged(fullPath)) {
-                console.log(`Warning: File "${fullPath}" has been modified. Using last committed date.`);
+                util.warn(`File "${fullPath}" has been modified. Using last committed date.`);
             }
 
-            const gitDate = getFileDate(fullPath);
+            let gitDate = getFileDate(fullPath);
+            if (gitDate == null) {
+                util.warn(`File "${fullPath}" is untracked. Using current date.`);
+                gitDate = new Date();
+            }
+
             file.gitDateDisplay = gitDate.toUTCString();
             file.gitDateIso = gitDate.toISOString();
         }

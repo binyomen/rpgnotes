@@ -56,3 +56,7 @@ module.exports.normalizePath = function(path) {
 
     return path;
 };
+
+module.exports.warn = function(msg) {
+    console.warn(`WARNING: ${msg}`);
+};
