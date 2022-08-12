@@ -48,7 +48,7 @@ module.exports = function(source) {
 
             let gitDate = getFileDate(fullPath);
             if (gitDate == null) {
-                util.warn(`File "${fullPath}" is untracked. Using current date.`);
+                util.warn(`File "${fullPath}" is untracked by Git. Using current date.`);
                 gitDate = new Date();
             }
 
