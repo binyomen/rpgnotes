@@ -5,13 +5,15 @@ const pathMod = require('node:path');
 
 const util = require('./util.js');
 
-function findPagePath(files, filename) {
+function findPagePath(files, filename, hash) {
+    const hashString = hash ? `#${hash}` : '';
+
     for (const path of util.filePaths(files, '.html')) {
         const basename = pathMod.basename(path, '.html');
         if (basename === filename) {
             const dirname = pathMod.dirname(path);
             const dir = dirname === '.' ? '' : `${dirname}/`;
-            return `/${dir}${basename}/`;
+            return `/${dir}${basename}/${hashString}`;
         }
     }
 
@@ -49,6 +51,14 @@ function unescapeHref(href) {
     return newHref;
 }
 
+function removeHash(href) {
+    const regex = /#([^#]+)$/;
+    const match = href.match(regex);
+    const hash = match ? match[1] : null;
+
+    return [href.replace(regex, ''), hash];
+}
+
 module.exports = function(gmMode) {
     return function(files, metalsmith) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
@@ -57,13 +67,13 @@ module.exports = function(gmMode) {
             for (const l of select('a')) {
                 const link = select(l);
 
-                const href = unescapeHref(link.attr('href'));
+                const [href, hash] = removeHash(unescapeHref(link.attr('href')));
                 if (pathMod.extname(href) !== '.md') {
                     continue;
                 }
 
                 const basename = pathMod.basename(href, '.md')
-                const newHref = findPagePath(files, basename);
+                const newHref = findPagePath(files, basename, hash);
                 if (newHref) {
                     link.attr('href', newHref);
                 } else {
