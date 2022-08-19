@@ -12,6 +12,7 @@ const layouts = require('@metalsmith/layouts');
 const markdown = require('@metalsmith/markdown');
 const permalinks = require('@metalsmith/permalinks');
 
+const alignment = require('./modules/alignment.js');
 const css = require('./modules/css.js');
 const collect = require('./modules/collect.js');
 const gitDate = require('./modules/gitDate.js');
@@ -53,6 +54,7 @@ metalsmith(__dirname)
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
+    .use(alignment())
     .use(secrets.sections(gmMode))
     .use(validate())
     .use(layouts({
