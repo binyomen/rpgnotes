@@ -11,6 +11,12 @@ module.exports = function() {
             title: 'Uncategorised',
         };
 
+        for (const collection of Object.values(metadata.collections)) {
+            if (collection.metadata.reverse) {
+                collection.reverse();
+            }
+        }
+
         for (const [path, file] of util.fileEntries(files)) {
             if (file.collection) {
                 if (!metadata.collections[file.collection].metadata) {
