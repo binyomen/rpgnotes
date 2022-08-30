@@ -60,11 +60,12 @@ metalsmith(__dirname)
     .use(alignment())
     .use(secrets.sections(gmMode))
     .use(validate())
+    .use(links.analyze())
     .use(layouts({
         default: 'page.hbs',
         pattern: '**/*.html',
     }))
-    .use(links(gmMode))
+    .use(links.transform(gmMode))
     .use(permalinks({relative: false}))
     .use(brokenLinkChecker({checkAnchors: true}))
     .use(search.index())

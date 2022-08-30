@@ -1,3 +1,11 @@
 {{> page_head }}
     {{{ contents }}}
+    {{#if linkedFrom}}
+    <h3>Referenced in</h3>
+    <ul>
+      {{#each linkedFrom}}
+      <li><a href="/{{ path }}">{{{ title }}}</a></li>
+      {{/each}}
+    </ul>
+    {{/if}}
 {{> page_foot }}

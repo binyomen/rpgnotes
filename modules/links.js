@@ -59,37 +59,62 @@ function removeHash(href) {
     return [href.replace(regex, ''), hash];
 }
 
-module.exports = function(gmMode) {
+function forEachLink(select, f) {
+    for (const l of select('a')) {
+        const link = select(l);
+
+        const [href, hash] = removeHash(unescapeHref(link.attr('href')));
+        if (pathMod.extname(href) !== '.md') {
+            continue;
+        }
+
+        const basename = pathMod.basename(href, '.md');
+
+        f({link, hash, basename});
+    }
+}
+
+module.exports.analyze = function() {
+    return function(files, metalsmith) {
+        for (const file of util.fileObjects(files, '.html')) {
+            const select = cheerio.load(file.contents);
+
+            forEachLink(select, function(l) {
+                for (const [linkedPath, linkedFile] of util.fileEntries(files, '.html')) {
+                    if (pathMod.basename(linkedPath, '.html') === l.basename) {
+                        if (!linkedFile.linkedFrom) {
+                            linkedFile.linkedFrom = new Set();
+                        }
+                        linkedFile.linkedFrom.add(file);
+                    }
+                }
+            });
+        }
+    };
+};
+
+module.exports.transform = function(gmMode) {
     return function(files, metalsmith) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
 
-            for (const l of select('a')) {
-                const link = select(l);
-
-                const [href, hash] = removeHash(unescapeHref(link.attr('href')));
-                if (pathMod.extname(href) !== '.md') {
-                    continue;
-                }
-
-                const basename = pathMod.basename(href, '.md')
-                const newHref = findPagePath(files, basename, hash);
+            forEachLink(select, function(l) {
+                const newHref = findPagePath(files, l.basename, l.hash);
                 if (newHref) {
-                    link.attr('href', newHref);
+                    l.link.attr('href', newHref);
                 } else {
-                    const msg = `Page "${basename}" not found, linked from "${path}".`;
+                    const msg = `Page "${l.basename}" not found, linked from "${path}".`;
                     if (gmMode) {
                         throw new Error(msg);
                     } else {
                         util.warn(msg);
                     }
 
-                    link.replaceWith(link.contents());
+                    l.link.replaceWith(l.link.contents());
                 }
-
-            }
+            });
 
             file.contents = Buffer.from(select.root().html());
         }
-    }
+    };
 };
