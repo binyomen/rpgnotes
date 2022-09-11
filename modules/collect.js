@@ -11,7 +11,11 @@ module.exports = function() {
             title: 'Uncategorised',
         };
 
-        for (const collection of Object.values(metadata.collections)) {
+        for (const [name, collection] of Object.entries(metadata.collections)) {
+            if (!collection.metadata) {
+                throw new Error(`Collection "${name}" is not specified in rpgnotes.toml.`);
+            }
+
             if (collection.metadata.reverse) {
                 collection.reverse();
             }
