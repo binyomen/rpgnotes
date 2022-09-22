@@ -45,7 +45,7 @@ module.exports.addFile = function(files, fromPath, toPath) {
 
 module.exports.normalizePath = function(path) {
     path = path.replaceAll('\\', '/');
-    if (path[0] != '/') {
+    if (path[0] !== '/') {
         path = `/${path}`;
     }
 

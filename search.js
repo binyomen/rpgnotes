@@ -28,8 +28,8 @@ function getContext(s, start, end, context) {
     const contextStart = Math.max(start - context, 0);
     const contextEnd = Math.min(end + context, s.length);
 
-    const prefix = contextStart == 0 ? '"' : '"…';
-    const suffix = contextEnd == s.length ? '"' : '…"';
+    const prefix = contextStart === 0 ? '"' : '"…';
+    const suffix = contextEnd === s.length ? '"' : '…"';
 
     return (
         prefix +
