@@ -1,6 +1,6 @@
 {
     "name": "@binyomen/rpgnotes",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "bin": "index.js",
     "dependencies": {
         "@ltd/j-toml": "^1.30.0",
