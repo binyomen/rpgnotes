@@ -18,6 +18,7 @@ const collect = require('./modules/collect.js');
 const gitDate = require('./modules/gitDate.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
+const macros = require('./modules/macros.js');
 const search = require('./modules/search.js');
 const secrets = require('./modules/secrets.js');
 const validate = require('./modules/validate.js');
@@ -57,6 +58,7 @@ metalsmith(__dirname)
     .use(collections(collections_opts))
     .use(collect())
     .use(markdown())
+    .use(macros(options.build.macroDirectory))
     .use(alignment())
     .use(secrets.sections(gmMode))
     .use(validate())

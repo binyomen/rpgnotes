@@ -3,6 +3,7 @@ title = 'Test for rpgnotes'
 
 [build]
 source = 'test_pages'
+macro-directory = 'test_macros'
 
 [[collections]]
 name = 'journals'

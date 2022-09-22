@@ -27,6 +27,7 @@ module.exports = function() {
     options.build = defaultOption(options.build, {});
     options.build.source = pathMod.join(cwd, defaultOption(options.build.source, 'src'));
     options.build.destination = pathMod.join(cwd, defaultOption(options.build.destination, 'build'));
+    options.build.macroDirectory = pathMod.join(cwd, defaultOption(options.build['macro-directory'], 'macros'));
 
     options.collections = defaultOption(options.collections, []);
 
