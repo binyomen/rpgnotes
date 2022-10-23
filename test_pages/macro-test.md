@@ -26,3 +26,9 @@ title: Macro test
 **strong text**
 
 </div>
+
+### Scripts shouldn't be removed
+
+<span data-macro="script_test"></span>
+
+See title of page.

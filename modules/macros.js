@@ -72,7 +72,7 @@ module.exports = function(macroDir) {
                 const macroCall = parseMacroCall(moduleMap, element.data('macro'));
 
                 const result = macroCall.func(select, macroCall.args, element);
-                element.replaceWith(select.parseHTML(result));
+                element.replaceWith(select.parseHTML(result, true /*keepScripts*/));
             }
 
             file.contents = Buffer.from(select.root().html());
