@@ -4,6 +4,7 @@ title = 'Test for rpgnotes'
 [build]
 source = 'test_pages'
 macro-directory = 'test_macros'
+css-files = ['/css/test-style.css']
 
 [[collections]]
 name = 'journals'

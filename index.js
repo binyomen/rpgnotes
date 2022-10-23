@@ -46,6 +46,7 @@ metalsmith(__dirname)
         siteTitle: options.about.title,
         buildDateDisplay,
         buildDateIso,
+        cssFiles: options.build.cssFiles,
     })
     .source(options.build.source)
     .destination(options.build.destination)

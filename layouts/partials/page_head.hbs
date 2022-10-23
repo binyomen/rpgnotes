@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
     <link rel="stylesheet" href="/css/rpgnotes.css">
 
+    {{#each cssFiles}}
+      <link rel="stylesheet" href="{{ this }}">
+    {{/each}}
+
     {{#if isSearch}}
       <script type="module" src="/js/search.js"></script>
     {{/if}}
