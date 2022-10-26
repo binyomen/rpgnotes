@@ -3,40 +3,28 @@
 const fs = require('node:fs');
 const pathMod = require('node:path');
 
-module.exports.fileEntries = function(files, extension) {
-    const entries = [];
-
+module.exports.fileEntries = function*(files, extension) {
     for (const [path, file] of Object.entries(files)) {
         if (extension === undefined || pathMod.extname(path) === extension) {
-            entries.push([path, file]);
+            yield [path, file];
         }
     }
-
-    return entries;
 };
 
-module.exports.filePaths = function(files, extension) {
-    const paths = [];
-
+module.exports.filePaths = function*(files, extension) {
     for (const path of Object.keys(files)) {
         if (extension === undefined || pathMod.extname(path) === extension) {
-            paths.push(path);
+            yield path;
         }
     }
-
-    return paths;
 };
 
-module.exports.fileObjects = function(files, extension) {
-    const objects = [];
-
+module.exports.fileObjects = function*(files, extension) {
     for (const [path, file] of Object.entries(files)) {
         if (extension === undefined || pathMod.extname(path) === extension) {
-            objects.push(file);
+            yield file;
         }
     }
-
-    return objects;
 };
 
 module.exports.addFile = function(files, fromPath, toPath) {

@@ -54,6 +54,10 @@ module.exports = function(macroDir) {
 
     return function(files, metalsmith) {
         const macroFiles = fs.readdirSync(macroDir);
+        if (macroFiles.length === 0) {
+            return;
+        }
+
         const moduleMap = {};
         for (const macroFile of macroFiles) {
             if (pathMod.extname(macroFile) !== '.js') {
