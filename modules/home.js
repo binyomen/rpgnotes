@@ -6,7 +6,7 @@ module.exports = function() {
         home.isHome = true;
 
         // Set this to something that resolves to the empty string in templates
-        // but isn't falsy so it won't be overwritten.
+        // but isn't falsey so it won't be overwritten.
         home.path = Buffer.from('');
     }
 };
