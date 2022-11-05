@@ -19,7 +19,9 @@
       <script type="module" src="/js/search.js"></script>
     {{/if}}
 
-    {{#if title}}
+    {{#if strippedTitle }}
+      <title>{{ siteTitle }} - {{{ strippedTitle }}}</title>
+    {{else if title}}
       <title>{{ siteTitle }} - {{{ title }}}</title>
     {{else}}
       <title>{{ siteTitle }}</title>

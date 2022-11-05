@@ -11,7 +11,9 @@ module.exports.pages = function(gmMode) {
         for (const [path, file] of util.fileEntries(files)) {
             if (file.secret) {
                 if (file.title && gmMode) {
-                    file.title = `<mark>[SECRET]</mark> ${file.title}`;
+                    const newTitle = file.title;
+                    file.title = `<mark>[SECRET]</mark> ${newTitle}`;
+                    file.strippedTitle = `[SECRET] ${newTitle}`;
                 }
 
                 secretPages.push(path);
