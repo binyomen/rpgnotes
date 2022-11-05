@@ -71,9 +71,9 @@ module.exports = function(macroDir) {
         for (const [path, file] of util.fileEntries(files, '.html')) {
             const select = cheerio.load(file.contents);
 
-            for (const e of select('[data-macro]')) {
+            for (const e of select('[data-rpgnotes-macro]')) {
                 const element = select(e);
-                const macroCall = parseMacroCall(moduleMap, element.data('macro'));
+                const macroCall = parseMacroCall(moduleMap, element.data('rpgnotes-macro'));
 
                 const result = macroCall.func(select, macroCall.args, element);
                 element.replaceWith(select.parseHTML(result, true /*keepScripts*/));
