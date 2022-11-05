@@ -5,7 +5,7 @@ collection: factions
 
 This text isn't secret.
 
-<div class="secret">
+<div data-rpgnotes-secret>
 
 This text is!
 
@@ -13,11 +13,11 @@ This text is!
 
 This text isn't again.
 
-This <span class="secret">word</span> is secret.
+This <span data-rpgnotes-secret>word</span> is secret.
 
-This <span class="secret">[link](link-test.md)</span> is secret.
+This <span data-rpgnotes-secret>[link](link-test.md)</span> is secret.
 
-<div class="secret">
+<div data-rpgnotes-secret>
 
 Here's some secret text with _formatting_!
 
