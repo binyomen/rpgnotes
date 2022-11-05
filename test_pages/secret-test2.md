@@ -15,6 +15,8 @@ This text isn't again.
 
 This <span class="secret">word</span> is secret.
 
+This <span class="secret">[link](link-test.md)</span> is secret.
+
 <div class="secret">
 
 Here's some secret text with _formatting_!

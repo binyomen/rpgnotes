@@ -34,8 +34,23 @@ module.exports.sections = function(gmMode) {
             const select = cheerio.load(file.contents);
             for (const e of select('.secret')) {
                 const element = select(e);
+
+                let secretPrefix;
+                let secretSuffix;
+                const tagName = element.prop('tagName').toLowerCase();
+                if (tagName === 'span') {
+                    secretPrefix = '<mark>[SECRET BEGIN]</mark>';
+                    secretSuffix = '<mark>[SECRET END]</mark>';
+                } else if (tagName === 'div') {
+                    secretPrefix = '<p><mark>[SECRET BEGIN]</mark></p>';
+                    secretSuffix = '<p><mark>[SECRET END]</mark></p>';
+                } else {
+                    throw new Error('Secret class only supported on spans and divs.');
+                }
+
                 if (gmMode) {
-                    element.contents().wrapAll('<mark></mark>');
+                    element.prepend(secretPrefix);
+                    element.append(secretSuffix);
                     element.replaceWith(element.contents());
                 } else {
                     element.remove();
