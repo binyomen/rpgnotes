@@ -15,10 +15,6 @@ module.exports = function() {
             if (!collection.metadata) {
                 throw new Error(`Collection "${name}" is not specified in rpgnotes.toml.`);
             }
-
-            if (collection.metadata.reverse) {
-                collection.reverse();
-            }
         }
 
         for (const [path, file] of util.fileEntries(files)) {

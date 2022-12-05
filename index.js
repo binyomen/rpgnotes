@@ -29,10 +29,12 @@ require('./modules/partials.js')(__dirname);
 
 const collections_opts = {};
 for (const collection of options.collections) {
-    collections_opts[collection.name] = {metadata: {
-        title: collection.title,
+    collections_opts[collection.name] = {
         reverse: collection.reverse,
-    }};
+        metadata: {
+            title: collection.title,
+        },
+    };
 }
 
 const gmMode = process.argv.includes('--gm-mode');
