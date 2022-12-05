@@ -19,10 +19,6 @@ module.exports = function() {
 
         for (const [path, file] of util.fileEntries(files)) {
             if (file.collection) {
-                if (!metadata.collections[file.collection].metadata) {
-                    throw new Error(`Unregistered collection "${file.collection}" for file "${path}".`);
-                }
-
                 delete files[path];
 
                 const newPath = `${file.collection}/${path}`;
