@@ -27,10 +27,83 @@ const options = require('./modules/options.js')();
 
 require('./modules/partials.js')(__dirname);
 
+function compareTitles(file1, file2) {
+    function splitIntoTextAndNumbers(s) {
+        const groups = [];
+        let currentGroup = '';
+        let currentGroupIsNumeric;
+
+        const tryAddNewGroup = () => {
+            if (currentGroup !== '') {
+                const newGroup = currentGroupIsNumeric ?
+                    parseInt(currentGroup, 10) :
+                    currentGroup;
+
+                groups.push(newGroup);
+                currentGroup = '';
+            }
+        };
+
+        for (const c of s) {
+            const isNumeric = /\d/.test(c);
+            if (currentGroupIsNumeric !== isNumeric) {
+                tryAddNewGroup();
+            }
+
+            currentGroup += c;
+            currentGroupIsNumeric = isNumeric;
+        }
+
+        tryAddNewGroup();
+
+        return groups;
+    }
+
+    function basicCompare(a, b) {
+        if (a < b) {
+            return -1;
+        } else if (a > b) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    const title1 = file1.title;
+    const title2 = file2.title;
+
+    const split1 = splitIntoTextAndNumbers(title1);
+    const split2 = splitIntoTextAndNumbers(title2);
+
+    const maxLength = Math.max(split1.length, split2.length);
+
+    for (let i = 0; i < maxLength; ++i) {
+        if (i === split1.length) {
+            return -1;
+        } else if (i === split2.length) {
+            return 1;
+        }
+
+        const item1 = split1[i];
+        const item2 = split2[i];
+
+        if (item1 === item2) {
+            continue;
+        } else if (typeof item1 !== typeof item2) {
+            return basicCompare(item1.toString(), item2.toString());
+        } else {
+            return basicCompare(item1, item2);
+        }
+    }
+
+    return 0;
+}
+
 const collections_opts = {};
 for (const collection of options.collections) {
     collections_opts[collection.name] = {
         reverse: collection.reverse,
+        sortBy: compareTitles,
         metadata: {
             title: collection.title,
         },
