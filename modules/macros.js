@@ -68,7 +68,7 @@ module.exports = function(macroDir) {
             moduleMap[moduleName] = require(pathMod.join(macroDir, macroFile));
         }
 
-        for (const [path, file] of util.fileEntries(files, '.html')) {
+        for (const file of util.fileObjects(files, '.html')) {
             const select = cheerio.load(file.contents);
 
             for (const e of select('[data-rpgnotes-macro]')) {

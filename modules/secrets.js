@@ -30,7 +30,7 @@ module.exports.pages = function(gmMode) {
 
 module.exports.sections = function(gmMode) {
     return function(files, metalsmith) {
-        for (const [path, file] of util.fileEntries(files, '.html')) {
+        for (const file of util.fileObjects(files, '.html')) {
             const select = cheerio.load(file.contents);
             for (const e of select('[data-rpgnotes-secret]')) {
                 const element = select(e);
