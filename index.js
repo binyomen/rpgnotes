@@ -19,6 +19,7 @@ const gitDate = require('./modules/gitDate.js');
 const home = require('./modules/home.js');
 const links = require('./modules/links.js');
 const macros = require('./modules/macros.js');
+const performance = require('./modules/performance.js');
 const search = require('./modules/search.js');
 const secrets = require('./modules/secrets.js');
 const validate = require('./modules/validate.js');
@@ -127,27 +128,29 @@ metalsmith(__dirname)
     .source(options.build.source)
     .destination(options.build.destination)
     .clean(true)
-    .use(secrets.pages(gmMode))
-    .use(gitDate(options.build.source))
-    .use(home())
-    .use(css(__dirname))
-    .use(search.page(__dirname))
-    .use(collections(collections_opts))
-    .use(collect())
-    .use(markdown())
-    .use(macros(options.build.macroDirectory))
-    .use(alignment())
-    .use(secrets.sections(gmMode))
-    .use(validate())
-    .use(links.analyze())
+    .use(performance.init())
+    .use(secrets.pages(gmMode)).use(performance.measure('secrets.pages'))
+    .use(gitDate(options.build.source)).use(performance.measure('gitDate'))
+    .use(home()).use(performance.measure('home'))
+    .use(css(__dirname)).use(performance.measure('css'))
+    .use(search.page(__dirname)).use(performance.measure('search.page'))
+    .use(collections(collections_opts)).use(performance.measure('collections'))
+    .use(collect()).use(performance.measure('collect'))
+    .use(markdown()).use(performance.measure('markdown'))
+    .use(macros(options.build.macroDirectory)).use(performance.measure('macros'))
+    .use(alignment()).use(performance.measure('alignment'))
+    .use(secrets.sections(gmMode)).use(performance.measure('secrets.sections'))
+    .use(validate()).use(performance.measure('validate'))
+    .use(links.analyze()).use(performance.measure('links.analyze'))
     .use(layouts({
         default: 'page.hbs',
         pattern: '**/*.html',
-    }))
-    .use(links.transform(gmMode))
-    .use(permalinks({relative: false}))
-    .use(brokenLinkChecker({checkAnchors: true}))
-    .use(search.index())
+    })).use(performance.measure('layouts'))
+    .use(links.transform(gmMode)).use(performance.measure('links.transform'))
+    .use(permalinks({relative: false})).use(performance.measure('permalinks'))
+    .use(brokenLinkChecker({checkAnchors: true})).use(performance.measure('brokenLinkChecker'))
+    .use(search.index()).use(performance.measure('search.index'))
+    .use(performance.result())
     .build(function(err, files) {
         if (err) { throw err; }
     });
