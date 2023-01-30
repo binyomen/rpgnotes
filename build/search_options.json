@@ -1,0 +1,1 @@
+{"fields":["title","contents"],"storeFields":["title","contents","path"],"searchOptions":{"boost":{"title":2},"fuzzy":true,"prefix":true}}

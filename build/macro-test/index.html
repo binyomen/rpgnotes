@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en-us"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="/css/rpgnotes.css">
+
+      <link rel="stylesheet" href="/css/test-style.css">
+
+
+      <title>Test for rpgnotes - Macro test</title>
+  </head>
+  <body>
+    <header>
+      <h1>Test for rpgnotes</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+              <li><a href="/journals/">Journals</a></li>
+              <li><a href="/characters/">Characters</a></li>
+              <li><a href="/npcs/">NPCs</a></li>
+              <li><a href="/locations/">Locations</a></li>
+              <li><a href="/factions/">Factions</a></li>
+              <li><a href="/items/">Items</a></li>
+              <li><a href="/uncategorised/">Uncategorised</a></li>
+        </ul>
+      </nav>
+      <form method="get" action="/search/">
+        <input id="search-input" type="search" name="q" autocomplete="off" placeholder="e.g. good duck">
+        <button>Search</button>
+      </form>
+    </header>
+    <main>
+        <h2 id="page-header">Macro test</h2>
+    <h3 id="should-output-undefined">Should output <code>undefined</code></h3>
+<p>undefined</p><p></p>
+
+<h3 id="should-output-myfield8">Should output <code>{"myField":8}</code></h3>
+<p></p><p>{"myField":8}</p><p></p><p></p>
+<h3 id="should-output-123-and-then-ul-lifirstli-lisecondli-ul">Should output <code>[1,2,3]</code> and then <code>&lt;ul&gt; &lt;li&gt;First&lt;/li&gt; &lt;li&gt;Second&lt;/li&gt; &lt;/ul&gt; </code></h3>
+<p>[1,2,3]</p><p>
+
+&lt;ul&gt;
+&lt;li&gt;First&lt;/li&gt;
+&lt;li&gt;Second&lt;/li&gt;
+&lt;/ul&gt;
+</p>
+
+<h3 id="should-output-strongstrong-textstrong">Should output <code>&lt;strong&gt;strong text&lt;/strong&gt;</code></h3>
+&lt;strong&gt;strong text&lt;/strong&gt;
+
+<h3 id="scripts-shouldnt-be-removed">Scripts shouldn't be removed</h3>
+<p><script type="module">document.querySelector("#page-header").append(" (scripts work)");</script></p>
+<p>See title of page.</p>
+
+    </main>
+    <footer>
+      <p>
+          NO TIME
+      </p>
+    </footer>
+  
+
+</body></html>

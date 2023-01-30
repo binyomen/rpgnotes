@@ -119,6 +119,7 @@ const buildDateIso = buildDate.toISOString();
 metalsmith(__dirname)
     .metadata({
         siteTitle: options.about.title,
+        noTime: process.env.RPGNOTES_NO_TIME,
         buildDateDisplay,
         buildDateIso,
         cssFiles: options.build.cssFiles,

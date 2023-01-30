@@ -7,6 +7,9 @@ param(
 $local:ErrorActionPreference = 'Stop'
 
 Push-Location $PSScriptRoot
+
+$oldTimeSetting = $env:RPGNOTES_NO_TIME
+$env:RPGNOTES_NO_TIME = 1
 try {
     Get-Process python -ErrorAction SilentlyContinue | `
         Where-Object {$_.CommandLine -like '*http.server*'} | `
@@ -22,5 +25,6 @@ try {
         Pop-Location
     }
 } finally {
+    $env:RPGNOTES_NO_TIME = $oldTimeSetting
     Pop-Location
 }
