@@ -6,13 +6,9 @@ let lastTime = null
 const measurements = [];
 
 module.exports.init = function() {
-    if (process.env.RPGNOTES_PERFORMANCE) {
-        return function(files, metalsmith) {
-            lastTime = performance.now();
-        };
-    } else {
-        return function(files, metalsmith) {};
-    }
+    return function(files, metalsmith) {
+        lastTime = performance.now();
+    };
 }
 
 module.exports.measure = function(name) {
@@ -43,6 +39,9 @@ module.exports.result = function() {
             }
         };
     } else {
-        return function(files, metalsmith) {};
+        return function(files, metalsmith) {
+            const nowTime = performance.now();
+            console.log(`Site generated in ${Math.round(nowTime - lastTime)}ms`);
+        };
     }
 };
