@@ -1,0 +1,9 @@
+{
+    "name": "rpgnotes",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {}
+    },
+    "postCreateCommand": "npm install",
+    "remoteUser": "vscode"
+}

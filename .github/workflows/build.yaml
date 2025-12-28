@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and check there are no changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+            node-version: lts/*
+      - name: Install dependencies
+        run: npm install
+      - name: Build test site
+        run: npm run build
+      - uses: infotroph/tree-is-clean@v1
+        with:
+          check_untracked: true
