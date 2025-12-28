@@ -21,9 +21,11 @@ const links = require('./modules/links.js');
 const macros = require('./modules/macros.js');
 const performance = require('./modules/performance.js');
 const search = require('./modules/search.js');
+const shopping = require('./modules/shopping.js');
 const secrets = require('./modules/secrets.js');
 const validate = require('./modules/validate.js');
 const server = require('./modules/server.js');
+const sourcePath = require('./modules/sourcePath.js');
 
 const options = require('./modules/options.js')();
 
@@ -153,10 +155,11 @@ metalsmith(__dirname)
     .source(options.build.source)
     .destination(options.build.destination)
     .clean(true)
-    .watch(watch)
+    .watch(watch && [options.build.source, 'search.js', 'shopping.js', 'rpgnotes.css'])
     .use(performance.init(trackPerformance))
+    .use(sourcePath()).use(performance.measure('sourcePath'))
     .use(secrets.pages(gmMode)).use(performance.measure('secrets.pages'))
-    .use(gitDate(options.build.source)).use(performance.measure('gitDate'))
+    .use(gitDate()).use(performance.measure('gitDate'))
     .use(home()).use(performance.measure('home'))
     .use(css(__dirname)).use(performance.measure('css'))
     .use(search.page(__dirname)).use(performance.measure('search.page'))
@@ -168,6 +171,7 @@ metalsmith(__dirname)
     .use(secrets.sections(gmMode)).use(performance.measure('secrets.sections'))
     .use(validate()).use(performance.measure('validate'))
     .use(links.analyze()).use(performance.measure('links.analyze'))
+    .use(shopping(options.currencies)).use(performance.measure('shopping'))
     .use(layouts({
         default: 'page.hbs',
         pattern: '**/*.html',

@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en-us"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="/css/rpgnotes.css">
+
+      <link rel="stylesheet" href="/css/test-style.css">
+
+
+      <title>Test for rpgnotes - Shopping cart test</title>
+  </head>
+  <body>
+    <header>
+      <h1>Test for rpgnotes</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+              <li><a href="/journals/">Journals</a></li>
+              <li><a href="/characters/">Characters</a></li>
+              <li><a href="/npcs/">NPCs</a></li>
+              <li><a href="/locations/">Locations</a></li>
+              <li><a href="/factions/">Factions</a></li>
+              <li><a href="/items/">Items</a></li>
+              <li><a href="/uncategorised/">Uncategorised</a></li>
+        </ul>
+      </nav>
+      <form method="get" action="/search/">
+        <input id="search-input" type="search" name="q" autocomplete="off" placeholder="e.g. good duck">
+        <button>Search</button>
+      </form>
+    </header>
+    <main>
+        <h2 id="page-header">Shopping cart test</h2>
+    <table>
+<thead>
+<tr>
+<th>item</th>
+<th style="text-align: right;">cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><shopping-item cost="10" id="arrow">Arrow (single)</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="20" id="backpack">Backpack</shopping-item></td>
+<td style="text-align: right;">20 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="10" id="ball-bearings-bag-of-100">Ball Bearings (bag of 100)</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="10" id="bedroll">Bedroll</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="5" id="blanket">Blanket</shopping-item></td>
+<td style="text-align: right;">50 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.5" id="bucket">Bucket</shopping-item></td>
+<td style="text-align: right;">50 cp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.1" id="candle">Candle</shopping-item></td>
+<td style="text-align: right;">10 cp</td>
+</tr>
+<tr>
+<td><shopping-item cost="20" id="clothes-per-item-common-barovian-wear">Clothes (per item) common Barovian wear</shopping-item></td>
+<td style="text-align: right;">20 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="25" id="club">Club</shopping-item></td>
+<td style="text-align: right;">25 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="30" id="gaming-set-dice-poker-set">Gaming Set - dice poker set</shopping-item></td>
+<td style="text-align: right;">30 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="50" id="hammer">Hammer</shopping-item></td>
+<td style="text-align: right;">50 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.8" id="jug">Jug</shopping-item></td>
+<td style="text-align: right;">80 cp</td>
+</tr>
+<tr>
+<td><shopping-item cost="10" id="ladder">Ladder</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="15" id="lamp">Lamp</shopping-item></td>
+<td style="text-align: right;">15 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="100" id="lock-w-key">Lock (w/ Key)</shopping-item></td>
+<td style="text-align: right;">100 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="20" id="manacles">Manacles</shopping-item></td>
+<td style="text-align: right;">20 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="100" id="map-of-barovia-village">Map of Barovia Village</shopping-item></td>
+<td style="text-align: right;">100 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="1" id="paper-1-sheet">Paper (1 sheet)</shopping-item></td>
+<td style="text-align: right;">1 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.1" id="piton">Piton</shopping-item></td>
+<td style="text-align: right;">1 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="10" id="pole-1-ladder">Pole (1 ladder)</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="5" id="pouch">Pouch</shopping-item></td>
+<td style="text-align: right;">50 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="10" id="rope-25ft">Rope (25ft)</shopping-item></td>
+<td style="text-align: right;">10 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="5" id="rations-1-meals-worth">Rations (1 meals worth)</shopping-item></td>
+<td style="text-align: right;">5 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="20" id="shovel">Shovel</shopping-item></td>
+<td style="text-align: right;">20 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.5" id="signal-whistle">Signal Whistle</shopping-item></td>
+<td style="text-align: right;">5 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.1" id="soap-small-bar">Soap (Small bar)</shopping-item></td>
+<td style="text-align: right;">1 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="50" id="steel-mirror">Steel Mirror</shopping-item></td>
+<td style="text-align: right;">50 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="15" id="small-knife">Small Knife</shopping-item></td>
+<td style="text-align: right;">15 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="5" id="tinderbox">Tinderbox</shopping-item></td>
+<td style="text-align: right;">5 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="0.5" id="torch-1-small-hand-torch-lasts-1-hour-cannot-be-relit-after-use">Torch (1 small hand torch, lasts 1 hour, cannot be relit after use)</shopping-item></td>
+<td style="text-align: right;">5 sp</td>
+</tr>
+<tr>
+<td><shopping-item cost="2" id="waterskin">Waterskin</shopping-item></td>
+<td style="text-align: right;">2 gp</td>
+</tr>
+<tr>
+<td><shopping-item cost="100" id="vial">Vial</shopping-item></td>
+<td style="text-align: right;">100 gp</td>
+</tr>
+</tbody></table>
+
+    </main>
+    <footer>
+      <p>
+          NO TIME
+      </p>
+    </footer>
+      <shopping-cart config="{&quot;currency&quot;:{&quot;base-unit&quot;:&quot;gp&quot;},&quot;items&quot;:{&quot;arrow&quot;:{&quot;name&quot;:&quot;Arrow (single)&quot;,&quot;cost&quot;:10},&quot;backpack&quot;:{&quot;name&quot;:&quot;Backpack&quot;,&quot;cost&quot;:20},&quot;ball-bearings-bag-of-100&quot;:{&quot;name&quot;:&quot;Ball Bearings (bag of 100)&quot;,&quot;cost&quot;:10},&quot;bedroll&quot;:{&quot;name&quot;:&quot;Bedroll&quot;,&quot;cost&quot;:10},&quot;blanket&quot;:{&quot;name&quot;:&quot;Blanket&quot;,&quot;cost&quot;:5},&quot;bucket&quot;:{&quot;name&quot;:&quot;Bucket&quot;,&quot;cost&quot;:0.5},&quot;candle&quot;:{&quot;name&quot;:&quot;Candle&quot;,&quot;cost&quot;:0.1},&quot;clothes-per-item-common-barovian-wear&quot;:{&quot;name&quot;:&quot;Clothes (per item) common Barovian wear&quot;,&quot;cost&quot;:20},&quot;club&quot;:{&quot;name&quot;:&quot;Club&quot;,&quot;cost&quot;:25},&quot;gaming-set-dice-poker-set&quot;:{&quot;name&quot;:&quot;Gaming Set - dice poker set&quot;,&quot;cost&quot;:30},&quot;hammer&quot;:{&quot;name&quot;:&quot;Hammer&quot;,&quot;cost&quot;:50},&quot;jug&quot;:{&quot;name&quot;:&quot;Jug&quot;,&quot;cost&quot;:0.8},&quot;ladder&quot;:{&quot;name&quot;:&quot;Ladder&quot;,&quot;cost&quot;:10},&quot;lamp&quot;:{&quot;name&quot;:&quot;Lamp&quot;,&quot;cost&quot;:15},&quot;lock-w-key&quot;:{&quot;name&quot;:&quot;Lock (w/ Key)&quot;,&quot;cost&quot;:100},&quot;manacles&quot;:{&quot;name&quot;:&quot;Manacles&quot;,&quot;cost&quot;:20},&quot;map-of-barovia-village&quot;:{&quot;name&quot;:&quot;Map of Barovia Village&quot;,&quot;cost&quot;:100},&quot;paper-1-sheet&quot;:{&quot;name&quot;:&quot;Paper (1 sheet)&quot;,&quot;cost&quot;:1},&quot;piton&quot;:{&quot;name&quot;:&quot;Piton&quot;,&quot;cost&quot;:0.1},&quot;pole-1-ladder&quot;:{&quot;name&quot;:&quot;Pole (1 ladder)&quot;,&quot;cost&quot;:10},&quot;pouch&quot;:{&quot;name&quot;:&quot;Pouch&quot;,&quot;cost&quot;:5},&quot;rope-25ft&quot;:{&quot;name&quot;:&quot;Rope (25ft)&quot;,&quot;cost&quot;:10},&quot;rations-1-meals-worth&quot;:{&quot;name&quot;:&quot;Rations (1 meals worth)&quot;,&quot;cost&quot;:5},&quot;shovel&quot;:{&quot;name&quot;:&quot;Shovel&quot;,&quot;cost&quot;:20},&quot;signal-whistle&quot;:{&quot;name&quot;:&quot;Signal Whistle&quot;,&quot;cost&quot;:0.5},&quot;soap-small-bar&quot;:{&quot;name&quot;:&quot;Soap (Small bar)&quot;,&quot;cost&quot;:0.1},&quot;steel-mirror&quot;:{&quot;name&quot;:&quot;Steel Mirror&quot;,&quot;cost&quot;:50},&quot;small-knife&quot;:{&quot;name&quot;:&quot;Small Knife&quot;,&quot;cost&quot;:15},&quot;tinderbox&quot;:{&quot;name&quot;:&quot;Tinderbox&quot;,&quot;cost&quot;:5},&quot;torch-1-small-hand-torch-lasts-1-hour-cannot-be-relit-after-use&quot;:{&quot;name&quot;:&quot;Torch (1 small hand torch, lasts 1 hour, cannot be relit after use)&quot;,&quot;cost&quot;:0.5},&quot;waterskin&quot;:{&quot;name&quot;:&quot;Waterskin&quot;,&quot;cost&quot;:2},&quot;vial&quot;:{&quot;name&quot;:&quot;Vial&quot;,&quot;cost&quot;:100}}}"></shopping-cart>
+  
+
+</body></html>

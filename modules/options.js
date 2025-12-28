@@ -13,7 +13,7 @@ function defaultOption(value, def) {
     }
 }
 
-module.exports = function() {
+module.exports = function () {
     const cwd = process.cwd();
 
     const optionsFile = pathMod.join(cwd, 'rpgnotes.toml');
@@ -31,6 +31,8 @@ module.exports = function() {
     options.build.cssFiles = defaultOption(options.build['css-files'], []);
 
     options.collections = defaultOption(options.collections, []);
+
+    options.currencies = defaultOption(options.currencies, {})
 
     return options;
 };
