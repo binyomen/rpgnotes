@@ -10,5 +10,8 @@
         {{/if}}
       </p>
     </footer>
+    {{#if shopping}}
+      <shopping-cart config="{{ shopping.config }}"></shopping-cart>
+    {{/if}}
   </body>
 </html>

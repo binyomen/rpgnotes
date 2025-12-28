@@ -1,7 +1,6 @@
 'use strict';
 
 const childProcess = require('node:child_process');
-const pathMod = require('node:path');
 
 const util = require('./util.js');
 
@@ -33,22 +32,20 @@ function getFileDate(path) {
     }
 }
 
-module.exports = function(source) {
-    return function(files, metalsmith) {
+module.exports = function () {
+    return function (files, _metalsmith) {
         if (!isInGitRepo()) {
             return;
         }
 
-        for (const [path, file] of util.fileEntries(files, '.md')) {
-            const fullPath = pathMod.relative('.', pathMod.join(source, path));
-
-            if (isFileChanged(fullPath)) {
-                util.warn(`File "${fullPath}" has been modified. Using last committed date.`);
+        for (const file of util.fileObjects(files, '.md')) {
+            if (isFileChanged(file.sourcePath)) {
+                util.warn(`File "${file.sourcePath}" has been modified. Using last committed date.`);
             }
 
-            let gitDate = getFileDate(fullPath);
+            let gitDate = getFileDate(file.sourcePath);
             if (gitDate === null) {
-                util.warn(`File "${fullPath}" is untracked by Git. Using current date.`);
+                util.warn(`File "${file.sourcePath}" is untracked by Git. Using current date.`);
                 gitDate = new Date();
             }
 

@@ -34,3 +34,6 @@ title = 'Items'
 [[collections]]
 name = 'empty'
 title = 'Empty'
+
+[currencies.gold]
+base-unit = 'gp'
