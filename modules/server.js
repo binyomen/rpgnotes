@@ -1,7 +1,7 @@
 const http = require('http');
 const serveStatic = require('serve-static');
 
-module.exports.startServer = function (path) {
+module.exports.start = function (path) {
     const serve = serveStatic(
         path,
         {

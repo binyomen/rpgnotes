@@ -116,19 +116,17 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
     console.log(`Usage: rpgnotes [--gm-mode] [--no-time] [--watch [--serve]]
 
 Options:
-    --gm-mode Enables GM mode, which displays secrets
-    --no-time Disables timestamp generation (see RPGNOTES_NO_TIME)
-    --watch   Watches for changes and automatically rebuilds the site
-    --serve   If watch is enabled, runs a web server to serve the site
-
-Environment variables:
-RPGNOTES_NO_TIME     Disables timestamp generation on pages
-RPGNOTES_PERFORMANCE Enables performance logging`);
+    --gm-mode     Enables GM mode, which displays secrets
+    --no-time     Disables timestamp generation on pages
+    --performance Enables detailed performance logging
+    --watch       Watches for changes and automatically rebuilds the site
+    --serve       If watch is enabled, runs a web server to serve the site`);
     process.exit()
 }
 
 const gmMode = process.argv.includes('--gm-mode');
-const noTime = process.argv.includes('--no-time') || process.env.RPGNOTES_NO_TIME;
+const noTime = process.argv.includes('--no-time');
+const trackPerformance = process.argv.includes('--performance');
 const watch = process.argv.includes('--watch');
 const serve = process.argv.includes('--serve');
 
@@ -136,7 +134,7 @@ if (serve) {
     if (!watch) {
         console.warn('Warning: --serve cannot be used without --watch')
     } else {
-        server.startServer(options.build.destination);
+        server.start(options.build.destination);
     }
 }
 
@@ -156,7 +154,7 @@ metalsmith(__dirname)
     .destination(options.build.destination)
     .clean(true)
     .watch(watch)
-    .use(performance.init())
+    .use(performance.init(trackPerformance))
     .use(secrets.pages(gmMode)).use(performance.measure('secrets.pages'))
     .use(gitDate(options.build.source)).use(performance.measure('gitDate'))
     .use(home()).use(performance.measure('home'))

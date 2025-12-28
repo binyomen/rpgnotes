@@ -2,17 +2,19 @@
 
 const process = require('node:process');
 
-let lastTime = null
+let lastTime = null;
+let doDetailedMeasurement = false;
 const measurements = [];
 
-module.exports.init = function() {
+module.exports.init = function(detailed) {
+    doDetailedMeasurement = detailed;
     return function(files, metalsmith) {
         lastTime = performance.now();
     };
 }
 
 module.exports.measure = function(name) {
-    if (process.env.RPGNOTES_PERFORMANCE) {
+    if (doDetailedMeasurement) {
         return function(files, metalsmith) {
             const nowTime = performance.now();
             measurements.push({name, time: nowTime - lastTime});
@@ -24,7 +26,7 @@ module.exports.measure = function(name) {
 };
 
 module.exports.result = function() {
-    if (process.env.RPGNOTES_PERFORMANCE) {
+    if (doDetailedMeasurement) {
         return function(files, metalsmith) {
             let maxNameLength = 0;
             for (const measurement of measurements) {
