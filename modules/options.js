@@ -19,7 +19,9 @@ module.exports = function () {
     const optionsFile = pathMod.join(cwd, 'rpgnotes.toml');
     const contents = fs.readFileSync(optionsFile, 'utf8');
 
-    const options = toml.parse(contents);
+    const options = toml.parse(contents, {
+        bigint: false,
+    });
 
     options.about = defaultOption(options.about, {});
     options.about.title = defaultOption(options.about.title, '[NO TITLE]');
@@ -33,6 +35,9 @@ module.exports = function () {
     options.collections = defaultOption(options.collections, []);
 
     options.currencies = defaultOption(options.currencies, {})
+    Object.values(options.currencies).forEach((currency) => {
+        currency.precision = defaultOption(currency.precision, 2);
+    });
 
     return options;
 };

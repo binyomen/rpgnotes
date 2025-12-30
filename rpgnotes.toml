@@ -37,3 +37,4 @@ title = 'Empty'
 
 [currencies.gold]
 base-unit = 'gp'
+precision = 2

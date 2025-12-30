@@ -1,5 +1,7 @@
 'use strict';
 
+const pathMod = require('node:path');
+
 const cheerio = require('cheerio');
 
 const util = require('./util.js');
@@ -10,6 +12,12 @@ function slugify(string) {
 
 module.exports = function (currencies) {
     return function (files, _metalsmith, done) {
+        util.addFile(
+            files,
+            pathMod.join(pathMod.dirname(__dirname), 'shopping.js'),
+            pathMod.join('js', 'shopping.js')
+        );
+
         for (const file of util.fileObjects(files, '.html')) {
             const hasValidCurrency = !!(file.shopping && file.shopping.currency);
             const hasShoppingItems = file.contents.includes('<shopping-item');
