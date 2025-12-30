@@ -44,6 +44,15 @@ shopping-cart {
                 }
             }
         }
+
+        footer {
+            padding: 1em;
+            display: flex;
+
+            &>:first-child {
+                flex-grow: 1;
+            }
+        }
     }
 }
 

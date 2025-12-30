@@ -85,7 +85,6 @@ class ShoppingCartItem extends HTMLElement {
         this.#nameLink.textContent = name;
         this.#nameLink.href = `#${id}`;
         this.#nameCostText.textContent = `${cost}${currency['base-unit']}`;
-        this.#countInput.id = inputId;
     }
 
     get cost() {
@@ -114,17 +113,20 @@ class ShoppingCartItem extends HTMLElement {
 
 class ShoppingCart extends HTMLElement {
     #config;
+    #precisionMultiplier;
     #items;
     #itemsInCart;
     #emptyCartNode;
     #mainSection;
+    #totalSpan;
 
     constructor() {
         super();
 
         this.#config = JSON.parse(this.getAttribute('config'));
+        this.#precisionMultiplier = Math.pow(10, this.#config.currency.precision);
         this.#itemsInCart = [];
-        this.#emptyCartNode = document.createElement('p');
+        this.#emptyCartNode = document.createElement('span');
         this.#emptyCartNode.textContent = 'The cart is empty!';
 
         this.#items = {};
@@ -145,6 +147,9 @@ class ShoppingCart extends HTMLElement {
                 </header>
                 <main>
                 </main>
+                <footer>
+                    <span>Current Total:</span><span id="cart-total"></span>
+                </footer>
             </dialog>
         `;
 
@@ -161,6 +166,8 @@ class ShoppingCart extends HTMLElement {
 
         this.#mainSection = this.querySelector('main');
         this.#mainSection.append(this.#emptyCartNode);
+        this.#totalSpan = this.querySelector('#cart-total');
+        this.#totalSpan.textContent = `0${this.#config.currency['base-unit']}`;
 
         cartDialog.addEventListener('click', (e) => {
             if (e.target.tagName === 'A') {
@@ -169,6 +176,10 @@ class ShoppingCart extends HTMLElement {
         });
 
         this.append(viewCartBtn, cartDialog);
+    }
+
+    #roundToPrecision(value) {
+        return Math.round(this.#precisionMultiplier * value) / this.#precisionMultiplier;
     }
 
     handleItemUpdated(item) {
@@ -186,6 +197,12 @@ class ShoppingCart extends HTMLElement {
                 }
             }
         }
+
+        let totalCost = 0;
+        for (const itemInCart of this.#itemsInCart) {
+            totalCost += itemInCart.count * itemInCart.cost;
+        }
+        this.#totalSpan.textContent = `${this.#roundToPrecision(totalCost)}${this.#config.currency['base-unit']}`;
     }
 
     addItemToCart(itemId) {
