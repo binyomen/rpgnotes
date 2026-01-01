@@ -38,3 +38,16 @@ title = 'Empty'
 [currencies.gold]
 base-unit = 'gp'
 precision = 2
+
+[[currencies.gold.units]]
+name = 'pp'
+threshold = 1000
+value = 10
+
+[[currencies.gold.units]]
+name = 'sp'
+value = 0.1
+
+[[currencies.gold.units]]
+name = 'cp'
+value = 0.01
