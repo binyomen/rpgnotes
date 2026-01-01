@@ -48,6 +48,7 @@ shopping-cart {
         footer {
             padding: 1em;
             display: flex;
+            gap: 0.5em;
 
             &>:first-child {
                 flex-grow: 1;

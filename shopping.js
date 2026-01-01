@@ -1,5 +1,45 @@
 'use strict';
 
+class Currency {
+    #currency;
+    #precisionMultiplier;
+
+    constructor(currency) {
+        this.#currency = currency;
+        this.#precisionMultiplier = Math.pow(10, currency.precision);
+    }
+
+    get baseUnit() {
+        return this.#currency['base-unit'];
+    }
+
+    #roundToPrecision(value) {
+        return Math.round(this.#precisionMultiplier * value) / this.#precisionMultiplier;
+    }
+
+    formatCostByUnits(cost) {
+        const costByUnits = [];
+        this.#currency.units.slice(0, -1).forEach(unit => {
+            if (cost >= unit.threshold && cost >= unit.value) {
+                const value = Math.floor(this.#roundToPrecision(cost / unit.value));
+                cost = this.#roundToPrecision(cost - (value * unit.value));
+                costByUnits.push({
+                    name: unit.name,
+                    value: this.#roundToPrecision(value),
+                });
+            }
+        });
+        if (cost > 0) {
+            const finalUnit = this.#currency.units[this.#currency.units.length - 1];
+            costByUnits.push({
+                name: finalUnit.name,
+                value: this.#roundToPrecision(cost / finalUnit.value),
+            });
+        }
+        return costByUnits.map(unit => `${unit.value}${unit.name}`).join(' ');
+    }
+}
+
 class ShoppingItem extends HTMLElement {
     constructor() {
         super();
@@ -84,7 +124,7 @@ class ShoppingCartItem extends HTMLElement {
         this.#nameLabel.htmlFor = inputId;
         this.#nameLink.textContent = name;
         this.#nameLink.href = `#${id}`;
-        this.#nameCostText.textContent = `${cost}${currency['base-unit']}`;
+        this.#nameCostText.textContent = currency.formatCostByUnits(cost);
         this.#countInput.id = inputId;
     }
 
@@ -114,7 +154,7 @@ class ShoppingCartItem extends HTMLElement {
 
 class ShoppingCart extends HTMLElement {
     #config;
-    #precisionMultiplier;
+    #currency;
     #items;
     #itemsInCart;
     #emptyCartNode;
@@ -126,7 +166,7 @@ class ShoppingCart extends HTMLElement {
         super();
 
         this.#config = JSON.parse(this.getAttribute('config'));
-        this.#precisionMultiplier = Math.pow(10, this.#config.currency.precision);
+        this.#currency = new Currency(this.#config.currency);
         this.#itemsInCart = [];
         this.#emptyCartNode = document.createElement('span');
         this.#emptyCartNode.textContent = 'The cart is empty!';
@@ -135,7 +175,7 @@ class ShoppingCart extends HTMLElement {
         this.#items = {};
         Object.entries(this.#config.items).forEach(([key, value]) => {
             this.#items[key] = new ShoppingCartItem();
-            this.#items[key].setItemInfo(key, value, this.#config.currency);
+            this.#items[key].setItemInfo(key, value, this.#currency);
             this.#items[key].addEventListener('shopping-cart-item-count-updated', (e) => {
                 this.handleItemUpdated(e.target);
             });
@@ -171,7 +211,7 @@ class ShoppingCart extends HTMLElement {
         this.#mainSection = this.querySelector('main');
         this.#mainSection.append(this.#emptyCartNode);
         this.#totalSpan = this.querySelector('#cart-total');
-        this.#totalSpan.textContent = `0${this.#config.currency['base-unit']}`;
+        this.#totalSpan.textContent = `0${this.#currency.baseUnit}`;
 
         cartDialog.addEventListener('click', (e) => {
             if (e.target.tagName === 'A') {
@@ -180,10 +220,6 @@ class ShoppingCart extends HTMLElement {
         });
 
         this.append(viewCartBtn, cartDialog);
-    }
-
-    #roundToPrecision(value) {
-        return Math.round(this.#precisionMultiplier * value) / this.#precisionMultiplier;
     }
 
     handleItemUpdated(item) {
@@ -208,7 +244,13 @@ class ShoppingCart extends HTMLElement {
             totalCost += itemInCart.count * itemInCart.cost;
             totalCount += itemInCart.count;
         }
-        this.#totalSpan.textContent = `${this.#roundToPrecision(totalCost)}${this.#config.currency['base-unit']}`;
+
+        if (totalCost === 0) {
+            this.#totalSpan.textContent = `0${this.#currency.baseUnit}`;
+        } else {
+            this.#totalSpan.textContent = this.#currency.formatCostByUnits(totalCost);
+        }
+
         if (totalCount === 0) {
             this.#viewCartButtonCount.textContent = '';
         } else {
