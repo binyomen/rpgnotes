@@ -1,33 +1,33 @@
 'use strict';
 
-const process = require('node:process');
+const util = require('./util.js');
 
 let lastTime = null;
 let doDetailedMeasurement = false;
 const measurements = [];
 
-module.exports.init = function(detailed) {
+module.exports.init = function (detailed) {
     doDetailedMeasurement = detailed;
-    return function(files, metalsmith) {
+    return function () {
         lastTime = performance.now();
     };
 }
 
-module.exports.measure = function(name) {
+module.exports.measure = function (name) {
     if (doDetailedMeasurement) {
-        return function(files, metalsmith) {
+        return function () {
             const nowTime = performance.now();
-            measurements.push({name, time: nowTime - lastTime});
+            measurements.push({ name, time: nowTime - lastTime });
             lastTime = nowTime;
         };
     } else {
-        return function(files, metalsmith) {};
+        return function () { };
     }
 };
 
-module.exports.result = function() {
+module.exports.result = function () {
     if (doDetailedMeasurement) {
-        return function(files, metalsmith) {
+        return function () {
             let maxNameLength = 0;
             for (const measurement of measurements) {
                 if (measurement.name.length > maxNameLength) {
@@ -41,9 +41,9 @@ module.exports.result = function() {
             }
         };
     } else {
-        return function(files, metalsmith) {
+        return function () {
             const nowTime = performance.now();
-            console.log(`Site generated in ${Math.round(nowTime - lastTime)}ms`);
+            util.info(`Site generated in ${Math.round(nowTime - lastTime)}ms`);
         };
     }
 };
