@@ -10,7 +10,10 @@ class Subscribers {
     add(subscriber) {
         if (typeof subscriber === 'function') {
             this.#subscribers.push(subscriber);
+            return true;
         }
+
+        return false;
     }
 
     notify(...args) {
@@ -21,14 +24,22 @@ class Subscribers {
 }
 
 export default class ShoppingCartStore {
+    #storageEnabled;
     #items;
     #itemsInCart;
-    cartUpdateSubscribers;
+    #cartUpdateSubscribers;
 
     constructor(items) {
         this.#items = {};
         this.#itemsInCart = [];
-        this.cartUpdateSubscribers = new Subscribers();
+        this.#cartUpdateSubscribers = new Subscribers();
+
+        this.#storageEnabled = false;
+        try {
+            if (window.localStorage) {
+                this.#storageEnabled = true;
+            }
+        } catch { }
 
         const updateCart = this.#updateCart.bind(this);
         for (const [id, configItem] of Object.entries(items)) {
@@ -51,10 +62,31 @@ export default class ShoppingCartStore {
                     updateCart(id);
                 },
 
-                subscribe: (subscriber) => item.subscribers.add(subscriber),
+                subscribe(subscriber) {
+                    if (item.subscribers.add(subscriber)) {
+                        subscriber(item.count);
+                    }
+                },
             };
 
             this.#items[id] = item;
+        }
+
+        if (this.#storageEnabled && 'cart' in window.localStorage) {
+            try {
+                JSON.parse(window.localStorage['cart']).items.forEach(([id, count]) => {
+                    if (!(id in this.#items)) {
+                        console.error(`Could not restore item "${id}" from saved cart.`);
+                        return;
+                    }
+
+                    this.#itemsInCart.push(id);
+                    this.#items[id].count = count;
+                    this.#items[id].inCart = true;
+                });
+            } catch (e) {
+                console.error('Encountered an error when restoring the cart', e);
+            }
         }
 
         document.addEventListener('add-to-cart', (e) => {
@@ -62,30 +94,53 @@ export default class ShoppingCartStore {
         });
     }
 
-    #updateCart(id) {
-        const notification = {
-            action: 'update',
-            id,
+    get #dataToPersist() {
+        return {
+            items: this.#itemsInCart.map(id => [
+                id,
+                this.#items[id].count,
+            ]),
+        };
+    }
+
+    #getCartUpdateEvent(id) {
+        const event = {
+            action: '',
             count: 0,
             cost: 0,
         };
 
-        const idx = this.#itemsInCart.indexOf(id);
-        const item = this.#items[id];
-        if (item.count === 0 && idx > -1) {
-            this.#itemsInCart.splice(idx, 1);
-            notification.action = 'remove';
-        } else if (item.count > 0 && idx === -1) {
-            this.#itemsInCart.push(id);
-            notification.action = 'add';
+        if (id) {
+            event.action = 'update';
+            event.id = id;
+
+            const idx = this.#itemsInCart.indexOf(id);
+            const item = this.#items[id];
+            if (item.count === 0 && idx > -1) {
+                this.#itemsInCart.splice(idx, 1);
+                event.action = 'remove';
+            } else if (item.count > 0 && idx === -1) {
+                this.#itemsInCart.push(id);
+                event.action = 'add';
+            }
+        } else {
+            event.action = 'init';
+            event.ids = this.#itemsInCart;
         }
 
         this.#itemsInCart.map(id => this.#items[id]).forEach(item => {
-            notification.count += item.count;
-            notification.cost += item.count * item.cost;
+            event.count += item.count;
+            event.cost += item.count * item.cost;
         });
 
-        this.cartUpdateSubscribers.notify(notification);
+        return event;
+    }
+
+    #updateCart(id) {
+        this.#cartUpdateSubscribers.notify(this.#getCartUpdateEvent(id));
+        if (this.#storageEnabled) {
+            window.localStorage['cart'] = JSON.stringify(this.#dataToPersist);
+        }
     }
 
     *enumerateItems() {
@@ -94,8 +149,13 @@ export default class ShoppingCartStore {
                 id,
                 name: item.name,
                 cost: item.cost,
-                count: item.count,
             });
+        }
+    }
+
+    subscribeToCartUpdates(callback) {
+        if (this.#cartUpdateSubscribers.add(callback)) {
+            callback(this.#getCartUpdateEvent());
         }
     }
 
@@ -105,6 +165,24 @@ export default class ShoppingCartStore {
         }
 
         return this.#items[id].accessor;
+    }
+
+    clearCart() {
+        this.#itemsInCart = [];
+        Object.values(this.#items).forEach(item => {
+            item.inCart = false;
+            item.count = 0;
+        });
+
+        if (this.#storageEnabled) {
+            window.localStorage.removeItem('cart');
+        }
+
+        this.#cartUpdateSubscribers.notify({
+            action: 'clear',
+            count: 0,
+            cost: 0,
+        });
     }
 }
 
@@ -236,59 +314,26 @@ class ShoppingCartItem extends HTMLElement {
         this.#nameLink.textContent = item.name;
         this.#nameLink.href = `#${item.id}`;
         this.#nameCostText.textContent = currency.formatCostByUnits(item.cost);
-        this.#countInput.value = item.count;
         this.#countInput.id = inputId;
     }
 }
 
 class ShoppingCart extends HTMLElement {
-    #store;
-    #currency;
-    #itemNodes;
-    #emptyCartNode;
-    #mainSection;
-    #totalSpan;
-    #viewCartButtonCount;
-
     constructor() {
         super();
 
         const config = JSON.parse(this.getAttribute('config'));
-        this.#store = new ShoppingCartStore(config.items);
-        this.#currency = new Currency(config.currency);
+        const store = new ShoppingCartStore(config.items);
+        const currency = new Currency(config.currency);
 
-        this.#itemNodes = {};
-        for (const item of this.#store.enumerateItems()) {
-            this.#itemNodes[item.id] = new ShoppingCartItem();
-            this.#itemNodes[item.id].initialize(item, this.#store, this.#currency);
+        const itemNodes = {};
+        for (const item of store.enumerateItems()) {
+            itemNodes[item.id] = new ShoppingCartItem();
+            itemNodes[item.id].initialize(item, store, currency);
         }
 
-        this.#emptyCartNode = document.createElement('span');
-        this.#emptyCartNode.textContent = 'The cart is empty!';
-        this.#viewCartButtonCount = document.createTextNode('');
-
-        this.#store.cartUpdateSubscribers.add(({ action, id, count, cost }) => {
-            if (action === 'add') {
-                this.#mainSection.append(this.#itemNodes[id]);
-                this.#emptyCartNode.remove();
-            } else if (action === 'remove') {
-                this.#itemNodes[id].remove();
-            }
-
-            if (count > 0) {
-                this.#emptyCartNode.remove();
-                this.#viewCartButtonCount.textContent = ` (${count})`;
-            } else {
-                this.#mainSection.append(this.#emptyCartNode);
-                this.#viewCartButtonCount.textContent = '';
-            }
-
-            if (cost === 0) {
-                this.#totalSpan.textContent = `0${this.#currency.baseUnit}`;
-            } else {
-                this.#totalSpan.textContent = this.#currency.formatCostByUnits(cost);
-            }
-        });
+        const emptyCartNode = document.createElement('span');
+        emptyCartNode.textContent = 'The cart is empty!';
 
         this.innerHTML = `
             <button>View cart</button>
@@ -300,14 +345,24 @@ class ShoppingCart extends HTMLElement {
                 <main>
                 </main>
                 <footer>
-                    <span>Current Total:</span><span id="cart-total"></span>
+                    <span>Current Total:</span><span class="total"></span>
                 </footer>
+                <div class="toolbar">
+                    <button class="clear">Clear cart</button>
+                </div>
             </dialog>
         `;
 
         const cartDialog = this.querySelector('& > dialog');
+        cartDialog.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                cartDialog.close();
+            }
+        });
+
+        const viewCartButtonCount = document.createTextNode('');
         const viewCartBtn = this.querySelector('& > button');
-        viewCartBtn.append(this.#viewCartButtonCount);
+        viewCartBtn.append(viewCartButtonCount);
         viewCartBtn.addEventListener('click', () => {
             cartDialog.showModal();
         });
@@ -317,14 +372,45 @@ class ShoppingCart extends HTMLElement {
             cartDialog.close();
         });
 
-        this.#mainSection = this.querySelector('main');
-        this.#mainSection.append(this.#emptyCartNode);
-        this.#totalSpan = this.querySelector('#cart-total');
-        this.#totalSpan.textContent = `0${this.#currency.baseUnit}`;
+        const toolbar = cartDialog.querySelector('& > .toolbar');
+        const clearButton = toolbar.querySelector('& > button.clear');
+        clearButton.addEventListener('click', () => {
+            store.clearCart();
+        });
 
-        cartDialog.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A') {
-                cartDialog.close();
+        const mainSection = this.querySelector('main');
+        const totalSpan = this.querySelector('.total');
+
+        store.subscribeToCartUpdates(cartUpdate => {
+            if (cartUpdate.action === 'init') {
+                emptyCartNode.remove();
+                mainSection.append(...cartUpdate.ids.map(id => itemNodes[id]));
+            } else if (cartUpdate.action === 'clear') {
+                mainSection.innerHTML = '';
+                mainSection.append(emptyCartNode);
+            } else if (cartUpdate.action === 'add') {
+                mainSection.append(itemNodes[cartUpdate.id]);
+                emptyCartNode.remove();
+            } else if (cartUpdate.action === 'remove') {
+                itemNodes[cartUpdate.id].remove();
+            }
+
+            if (cartUpdate.count > 0) {
+                emptyCartNode.remove();
+                viewCartButtonCount.textContent = ` (${cartUpdate.count})`;
+                toolbar.classList.remove('hidden');
+                clearButton.disabled = false;
+            } else {
+                mainSection.append(emptyCartNode);
+                viewCartButtonCount.textContent = '';
+                toolbar.classList.add('hidden');
+                clearButton.disabled = true;
+            }
+
+            if (cartUpdate.cost === 0) {
+                totalSpan.textContent = `0${currency.baseUnit}`;
+            } else {
+                totalSpan.textContent = currency.formatCostByUnits(cartUpdate.cost);
             }
         });
     }
