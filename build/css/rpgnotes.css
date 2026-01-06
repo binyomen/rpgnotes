@@ -54,6 +54,18 @@ shopping-cart {
                 flex-grow: 1;
             }
         }
+
+        .toolbar {
+            display: flex;
+            padding: 1em;
+            gap: 1em;
+            justify-content: end;
+
+            &.hidden {
+                display: none;
+            }
+        }
+
     }
 }
 
