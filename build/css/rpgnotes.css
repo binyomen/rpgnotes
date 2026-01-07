@@ -47,25 +47,44 @@ shopping-cart {
 
         footer {
             padding: 1em;
-            display: flex;
-            gap: 0.5em;
 
-            &>:first-child {
-                flex-grow: 1;
+            .total-bar {
+                display: flex;
+                gap: 0.5em;
+                margin-bottom: 1em;
+                &>:first-child {
+                    flex-grow: 1;
+                }
+            }
+
+            .toolbar {
+                display: flex;
+                gap: 1em;
+                align-items: center;
+
+                &.hidden {
+                    display: none;
+                }
+
+                .cart-link {
+                    flex-grow: 1;
+                    display: flex;
+                    .link {
+                        flex-grow: 1;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+                    .copy-link {
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                }
+
+                * {
+                    margin: 0;
+                }
             }
         }
-
-        .toolbar {
-            display: flex;
-            padding: 1em;
-            gap: 1em;
-            justify-content: end;
-
-            &.hidden {
-                display: none;
-            }
-        }
-
     }
 }
 
