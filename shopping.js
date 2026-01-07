@@ -25,14 +25,17 @@ class Subscribers {
 
 export default class ShoppingCartStore {
     #storageEnabled;
+    #readonly;
     #items;
     #itemsInCart;
     #cartUpdateSubscribers;
+    #textEncoder;
 
     constructor(items) {
         this.#items = {};
         this.#itemsInCart = [];
         this.#cartUpdateSubscribers = new Subscribers();
+        this.#textEncoder = new TextEncoder();
 
         const updateCart = this.#updateCart.bind(this);
         for (const [id, configItem] of Object.entries(items)) {
@@ -65,16 +68,26 @@ export default class ShoppingCartStore {
             this.#items[id] = item;
         }
 
+        let existingCart = null;
         this.#storageEnabled = false;
-        try {
-            if (window.localStorage) {
-                this.#storageEnabled = true;
-            }
-        } catch { }
-
-        if (this.#storageEnabled && 'cart' in window.localStorage) {
+        const encodedCartFromUrl = new URL(window.location.href).searchParams.get('cart');
+        if (encodedCartFromUrl !== null) {
+            this.#readonly = true;
+            existingCart = new TextDecoder().decode(Uint8Array.fromBase64(encodedCartFromUrl, { alphabet: 'base64url' }));
+        } else {
             try {
-                JSON.parse(window.localStorage['cart']).items.forEach(([id, count]) => {
+                if (window.localStorage) {
+                    this.#storageEnabled = true;
+                    if ('cart' in window.localStorage) {
+                        existingCart = window.localStorage['cart'];
+                    }
+                }
+            } catch { }
+        }
+
+        if (existingCart !== null) {
+            try {
+                JSON.parse(existingCart).items.forEach(([id, count]) => {
                     if (!(id in this.#items)) {
                         console.error(`Could not restore item "${id}" from saved cart.`);
                         return;
@@ -128,6 +141,10 @@ export default class ShoppingCartStore {
             event.ids = this.#itemsInCart;
         }
 
+        if (this.#storageEnabled) {
+            event.encodedCart = this.#textEncoder.encode(JSON.stringify(this.#dataToPersist)).toBase64({ alphabet: 'base64url' });
+        }
+
         this.#itemsInCart.map(id => this.#items[id]).forEach(item => {
             event.count += item.count;
             event.cost += item.count * item.cost;
@@ -141,6 +158,14 @@ export default class ShoppingCartStore {
         if (this.#storageEnabled) {
             window.localStorage['cart'] = JSON.stringify(this.#dataToPersist);
         }
+    }
+
+    get storageEnabled() {
+        return this.#storageEnabled;
+    }
+
+    get readonly() {
+        return this.#readonly;
     }
 
     *enumerateItems() {
@@ -229,6 +254,10 @@ class Currency {
 class ShoppingItem extends HTMLElement {
     constructor() {
         super();
+        if (window.location.search.match(/[?&]cart=/)) {
+            return;
+        }
+
         const btn = document.createElement('button');
         btn.classList.add('add-to-cart');
         btn.textContent = 'Add to cart';
@@ -247,6 +276,7 @@ class ShoppingCartItem extends HTMLElement {
     #nameCostText;
     #countInput;
     #subtractButton;
+    #addButton;
 
     constructor() {
         super();
@@ -281,16 +311,16 @@ class ShoppingCartItem extends HTMLElement {
             this.#storeAccessor.count--;
         });
 
-        const addButton = document.createElement('button');
-        addButton.title = 'Increase quantity';
-        addButton.ariaLabel = 'Increase quantity';
-        addButton.textContent = '+';
-        addButton.addEventListener('click', () => {
+        this.#addButton = document.createElement('button');
+        this.#addButton.title = 'Increase quantity';
+        this.#addButton.ariaLabel = 'Increase quantity';
+        this.#addButton.textContent = '+';
+        this.#addButton.addEventListener('click', () => {
             this.#storeAccessor.count++;
         });
 
         this.innerHTML = '';
-        this.append(this.#nameLabel, this.#subtractButton, this.#countInput, addButton);
+        this.append(this.#nameLabel, this.#subtractButton, this.#countInput, this.#addButton);
     }
 
     initialize(item, store, currency) {
@@ -308,6 +338,12 @@ class ShoppingCartItem extends HTMLElement {
                 this.#subtractButton.textContent = 'X';
             }
         });
+
+        if (store.readonly) {
+            this.#subtractButton.disabled = true;
+            this.#addButton.disabled = true;
+            this.#countInput.readOnly = true;
+        }
 
         const inputId = `sc-input-${item.id}`;
         this.#nameLabel.htmlFor = inputId;
@@ -345,11 +381,17 @@ class ShoppingCart extends HTMLElement {
                 <main>
                 </main>
                 <footer>
-                    <span>Current Total:</span><span class="total"></span>
+                    <div class="total-bar">
+                        <span>Current Total:</span><span class="total"></span>
+                    </div>
+                    <div class="toolbar hidden">
+                        <div class="cart-link">
+                            <input type="text" class="link" name="link" title="Cart link" aria-label="Cart link" readonly>
+                            <button class="copy-link">Copy link</button>
+                        </div>
+                        <button class="clear" disabled>Clear cart</button>
+                    </div>
                 </footer>
-                <div class="toolbar">
-                    <button class="clear">Clear cart</button>
-                </div>
             </dialog>
         `;
 
@@ -372,8 +414,13 @@ class ShoppingCart extends HTMLElement {
             cartDialog.close();
         });
 
-        const toolbar = cartDialog.querySelector('& > .toolbar');
-        const clearButton = toolbar.querySelector('& > button.clear');
+        const toolbar = cartDialog.querySelector('.toolbar');
+        const cartLink = toolbar.querySelector('.link');
+        const copyLinkButton = toolbar.querySelector('.copy-link');
+        copyLinkButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(cartLink.value);
+        });
+        const clearButton = toolbar.querySelector('button.clear');
         clearButton.addEventListener('click', () => {
             store.clearCart();
         });
@@ -385,6 +432,9 @@ class ShoppingCart extends HTMLElement {
             if (cartUpdate.action === 'init') {
                 emptyCartNode.remove();
                 mainSection.append(...cartUpdate.ids.map(id => itemNodes[id]));
+                if (store.readonly) {
+                    cartDialog.showModal();
+                }
             } else if (cartUpdate.action === 'clear') {
                 mainSection.innerHTML = '';
                 mainSection.append(emptyCartNode);
@@ -398,12 +448,19 @@ class ShoppingCart extends HTMLElement {
             if (cartUpdate.count > 0) {
                 emptyCartNode.remove();
                 viewCartButtonCount.textContent = ` (${cartUpdate.count})`;
-                toolbar.classList.remove('hidden');
-                clearButton.disabled = false;
+                if (store.storageEnabled) {
+                    toolbar.classList.remove('hidden');
+                    clearButton.disabled = false;
+
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('cart', cartUpdate.encodedCart);
+                    cartLink.value = url.toString();
+                }
             } else {
                 mainSection.append(emptyCartNode);
                 viewCartButtonCount.textContent = '';
                 toolbar.classList.add('hidden');
+                cartLink.value = '';
                 clearButton.disabled = true;
             }
 
