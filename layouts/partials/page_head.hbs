@@ -23,9 +23,9 @@
     {{/if}}
 
     {{#if strippedTitle }}
-      <title>{{ siteTitle }} — {{{ strippedTitle }}}</title>
+      <title>{{{ strippedTitle }}} — {{ siteTitle }}</title>
     {{else if title}}
-      <title>{{ siteTitle }} — {{{ title }}}</title>
+      <title>{{{ title }}} — {{ siteTitle }}</title>
     {{else}}
       <title>{{ siteTitle }}</title>
     {{/if}}
